@@ -12,6 +12,6 @@ class SignUpController(
 ) {
 
     @PostMapping("/signup")
-    fun signUpBrand(@RequestBody signUpDto: SignUpDto): Int =
+    suspend fun signUpBrand(@RequestBody signUpDto: SignUpDto): Int =
         signUpService.signUpBrand(signUpDto)
 }
