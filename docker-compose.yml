@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  postgres:
+    image: postgres:12.3
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: mocchi
+      POSTGRES_PASSWORD: mocchi
+      POSTGRES_DB: mocchi
