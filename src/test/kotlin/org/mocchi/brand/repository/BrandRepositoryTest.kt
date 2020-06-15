@@ -1,9 +1,11 @@
 package org.mocchi.brand.repository
 
 import kotlinx.coroutines.runBlocking
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.mocchi.brand.AbstractIntegrationTest
 import org.mocchi.brand.model.controller.SignUpDto
+import org.mocchi.brand.model.entity.Brand
 import org.springframework.beans.factory.annotation.Autowired
 
 internal class BrandRepositoryTest : AbstractIntegrationTest() {
@@ -19,8 +21,16 @@ internal class BrandRepositoryTest : AbstractIntegrationTest() {
                 companyUrl = "companyUrl",
                 companyEmail = "companyEmail"
             )
-            val res = brandRepository.addNewBrand(signUpDto)
-            println(res)
+            val expected = Brand(
+                id = 1,
+                fullName = "companyName",
+                url = "companyUrl",
+                email = "companyEmail"
+            )
+            val actual = brandRepository.addNewBrand(signUpDto)
+            assertThat(actual)
+                .isEqualToIgnoringGivenFields(expected, "id")
+                .hasNoNullFieldsOrProperties()
         }
     }
 }
