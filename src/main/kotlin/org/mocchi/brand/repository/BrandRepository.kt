@@ -2,7 +2,6 @@ package org.mocchi.brand.repository
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.mocchi.brand.convert.BrandAfterInsertConverter
-import org.mocchi.brand.model.controller.SignUpDto
 import org.mocchi.brand.model.entity.Brand
 import org.mocchi.brand.model.entity.InsertBrand
 import org.springframework.data.r2dbc.core.DatabaseClient

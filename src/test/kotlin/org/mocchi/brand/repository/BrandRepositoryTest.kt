@@ -2,16 +2,12 @@ package org.mocchi.brand.repository
 
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.mocchi.brand.AbstractIntegrationTest
-import org.mocchi.brand.model.controller.SignUpDto
 import org.mocchi.brand.model.entity.Brand
 import org.mocchi.brand.model.entity.InsertBrand
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.r2dbc.core.DatabaseClient
-import org.springframework.data.r2dbc.core.awaitRowsUpdated
 
 internal class BrandRepositoryTest : AbstractIntegrationTest() {
 
