@@ -4,3 +4,7 @@ db:
   database: mocchi
   username: mocchi
   password: mocchi
+
+shopify:
+  clientId: ${API_KEY}
+  clientSecret: ${API_SECRET_KEY}
