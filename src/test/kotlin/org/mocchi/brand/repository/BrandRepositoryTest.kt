@@ -17,19 +17,6 @@ internal class BrandRepositoryTest : AbstractIntegrationTest() {
     @Autowired
     private lateinit var brandRepository: BrandRepository
 
-    @Autowired
-    private lateinit var databaseClient: DatabaseClient
-
-    @BeforeEach
-    fun setUp() {
-        runBlocking {
-            databaseClient.delete()
-                .from(Brand::class.java)
-                .fetch()
-                .awaitRowsUpdated()
-        }
-    }
-
     @Test
     fun `should insert new brand`() {
         runBlocking {

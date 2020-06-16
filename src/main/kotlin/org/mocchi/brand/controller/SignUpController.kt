@@ -9,12 +9,11 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @RequestMapping("/api/v1/brand")
 class SignUpController(
-    private val signUpService: SignUpService,
-    private val shopifyService: ShopifyService
+    private val signUpService: SignUpService
 ) {
 
     @PostMapping("/signup")
-    suspend fun signUpBrand(@RequestBody signUpDto: SignUpDto): Int =
+    suspend fun signUpBrand(@RequestBody signUpDto: SignUpDto): Long =
         signUpService.signUpBrand(signUpDto)
 
     @GetMapping("/complete")
@@ -22,7 +21,7 @@ class SignUpController(
         @RequestParam("code") code: String,
         @RequestParam("hmac") hmac: String,
         @RequestParam("shop") shop: String,
-        @RequestParam("state") state: Int
+        @RequestParam("state") state: Long
     ) =
-        shopifyService.validateResponse(shop, code)
+        signUpService.completeLogin(shop, code, state)
 }
