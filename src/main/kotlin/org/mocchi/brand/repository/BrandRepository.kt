@@ -2,7 +2,6 @@ package org.mocchi.brand.repository
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.mocchi.brand.convert.BrandAfterInsertConverter
-import org.mocchi.brand.model.controller.SignUpDto
 import org.mocchi.brand.model.entity.Brand
 import org.mocchi.brand.model.entity.InsertBrand
 import org.springframework.data.r2dbc.core.DatabaseClient
@@ -18,16 +17,10 @@ class BrandRepository(
     private val brandAfterInsertConverter: BrandAfterInsertConverter
 ) {
 
-    suspend fun addNewBrand(signUpDto: SignUpDto): Brand =
+    suspend fun addNewBrand(insertBrand: InsertBrand): Brand =
         databaseClient.insert()
             .into(InsertBrand::class.java)
-            .using(
-                InsertBrand(
-                    fullName = signUpDto.companyName,
-                    url = signUpDto.companyUrl,
-                    email = signUpDto.companyEmail
-                )
-            )
+            .using(insertBrand)
             .fetch()
             .awaitFirst()
             .let { brandAfterInsertConverter.convert(it) }

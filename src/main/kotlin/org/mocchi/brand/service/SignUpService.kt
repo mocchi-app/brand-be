@@ -1,42 +1,56 @@
 package org.mocchi.brand.service
 
+import org.mocchi.brand.model.client.AccessTokenResponse
 import org.mocchi.brand.model.controller.SignUpDto
 import org.mocchi.brand.model.entity.Brand
+import org.mocchi.brand.model.entity.InsertBrand
 import org.mocchi.brand.model.entity.InsertBrandToken
-import org.mocchi.brand.repository.BrandRepository
-import org.mocchi.brand.repository.BrandTokenRepository
 import org.mocchi.brand.repository.StateCodeRepository
 import org.springframework.stereotype.Service
 
 @Service
 class SignUpService(
-    private val brandRepository: BrandRepository,
+    private val brandService: BrandService,
+    private val brandTokenService: BrandTokenService,
     private val stateCodeRepository: StateCodeRepository,
-    private val brandTokenRepository: BrandTokenRepository,
     private val shopifyService: ShopifyService
 ) {
     suspend fun signUpBrand(signUpDto: SignUpDto): Long =
-        insertOrFindBrand(signUpDto)
-            .let { stateCodeRepository.saveNewCode(it.id).id }
+        stateCodeRepository.saveNewCode(signUpDto.companyUrl).id
 
     suspend fun completeLogin(shop: String, code: String, state: Long) =
         stateCodeRepository.getById(state)
-            ?.let { stateCode ->
+            ?.takeIf { it.url == shop }
+            ?.let {
                 shopifyService.validateResponse(shop, code)
                     .let { tokenResponse ->
-                        brandTokenRepository.saveTokenForBrandId(
-                            InsertBrandToken(
-                                stateCode.brandId,
-                                tokenResponse.accessToken,
-                                tokenResponse.scope,
-                                tokenResponse.expiresIn
-                            )
+                        val brand = brandService.insertOrFindBrand(
+                            insertBrand(tokenResponse, shop)
+                        )
+                        brandTokenService.insertOrUpdateTokenForBrand(
+                            insertBrandToken(brand, tokenResponse)
                         )
                     }
             }
             ?: throw RuntimeException("Unable to find code")
 
-    private suspend fun insertOrFindBrand(signUpDto: SignUpDto): Brand =
-        brandRepository.getByUrl(signUpDto.companyUrl) ?: brandRepository.addNewBrand(signUpDto)
+    private fun insertBrandToken(
+        brand: Brand, tokenResponse: AccessTokenResponse
+    ): InsertBrandToken = InsertBrandToken(
+        brand.id,
+        tokenResponse.accessToken,
+        tokenResponse.scope,
+        tokenResponse.expiresIn
+    )
+
+    private fun insertBrand(
+        tokenResponse: AccessTokenResponse,
+        shop: String
+    ): InsertBrand =
+        InsertBrand(
+            "${tokenResponse.associatedUser.firstName} ${tokenResponse.associatedUser.lastName}",
+            shop,
+            tokenResponse.associatedUser.email
+        )
 
 }

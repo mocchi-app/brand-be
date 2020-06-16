@@ -1,17 +1,13 @@
 package org.mocchi.brand.repository
 
 import kotlinx.coroutines.runBlocking
-import org.assertj.core.api.Assertions
-import org.junit.jupiter.api.BeforeEach
+import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.mocchi.brand.AbstractIntegrationTest
-import org.mocchi.brand.model.controller.SignUpDto
-import org.mocchi.brand.model.entity.Brand
 import org.mocchi.brand.model.entity.BrandToken
+import org.mocchi.brand.model.entity.InsertBrand
 import org.mocchi.brand.model.entity.InsertBrandToken
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.data.r2dbc.core.DatabaseClient
-import org.springframework.data.r2dbc.core.awaitRowsUpdated
 
 internal class BrandTokenRepositoryTest : AbstractIntegrationTest() {
 
@@ -24,12 +20,12 @@ internal class BrandTokenRepositoryTest : AbstractIntegrationTest() {
     @Test
     fun `should insert new brand`() {
         runBlocking {
-            val signUpDto = SignUpDto(
-                companyName = "companyName",
-                companyUrl = "companyUrl",
-                companyEmail = "companyEmail"
+            val insertBrand = InsertBrand(
+                fullName = "companyName",
+                url = "companyUrl",
+                email = "companyEmail"
             )
-            val brand = brandRepository.addNewBrand(signUpDto)
+            val brand = brandRepository.addNewBrand(insertBrand)
 
             val insertToken = InsertBrandToken(
                 bId = brand.id,
@@ -45,21 +41,115 @@ internal class BrandTokenRepositoryTest : AbstractIntegrationTest() {
                 expiresIn = 1000
             )
             val actual = brandTokenRepository.saveTokenForBrandId(insertToken)
-            Assertions.assertThat(actual)
+            assertThat(actual)
                 .isEqualToIgnoringGivenFields(expected, "id")
                 .hasNoNullFieldsOrProperties()
         }
     }
 
     @Test
+    fun `should update token`() {
+        runBlocking {
+            val insertBrand = InsertBrand(
+                fullName = "companyName",
+                url = "companyUrl",
+                email = "companyEmail"
+            )
+            val brand = brandRepository.addNewBrand(insertBrand)
+
+            val insertToken = InsertBrandToken(
+                bId = brand.id,
+                token = "token",
+                scope = "scope",
+                expiresIn = 1000
+            )
+            val expected = BrandToken(
+                id = 1,
+                bId = brand.id,
+                token = "token",
+                scope = "scope",
+                expiresIn = 1000
+            )
+            val actual = brandTokenRepository.saveTokenForBrandId(insertToken)
+            assertThat(actual)
+                .isEqualToIgnoringGivenFields(expected, "id")
+                .hasNoNullFieldsOrProperties()
+
+            val updateToken = InsertBrandToken(
+                bId = brand.id,
+                token = "token2",
+                scope = "scope2",
+                expiresIn = 1001
+            )
+            val expectedUpdated = BrandToken(
+                id = 1,
+                bId = brand.id,
+                token = "token2",
+                scope = "scope2",
+                expiresIn = 1001
+            )
+            assertThat(brandTokenRepository.updateTokeForBrand(updateToken))
+                .isEqualTo(1)
+
+            assertThat(brandTokenRepository.getByBrandId(brand.id))
+                .isEqualToIgnoringGivenFields(expectedUpdated, "id")
+
+        }
+    }
+
+    @Test
+    fun `should not update token when brand id is incorrect`() {
+        runBlocking {
+            val insertBrand = InsertBrand(
+                fullName = "companyName",
+                url = "companyUrl",
+                email = "companyEmail"
+            )
+            val brand = brandRepository.addNewBrand(insertBrand)
+
+            val insertToken = InsertBrandToken(
+                bId = brand.id,
+                token = "token",
+                scope = "scope",
+                expiresIn = 1000
+            )
+            val expected = BrandToken(
+                id = 1,
+                bId = brand.id,
+                token = "token",
+                scope = "scope",
+                expiresIn = 1000
+            )
+            val actual = brandTokenRepository.saveTokenForBrandId(insertToken)
+            assertThat(actual)
+                .isEqualToIgnoringGivenFields(expected, "id")
+                .hasNoNullFieldsOrProperties()
+
+            val updateToken = InsertBrandToken(
+                bId = -1,
+                token = "token2",
+                scope = "scope2",
+                expiresIn = 1001
+            )
+            assertThat(brandTokenRepository.updateTokeForBrand(updateToken))
+                .isEqualTo(0)
+
+            assertThat(brandTokenRepository.getByBrandId(brand.id))
+                .isEqualToIgnoringGivenFields(expected, "id")
+
+        }
+    }
+
+
+    @Test
     fun `should find existing brand`() {
         runBlocking {
-            val signUpDto = SignUpDto(
-                companyName = "companyName",
-                companyUrl = "companyUrl",
-                companyEmail = "companyEmail"
+            val insertBrand = InsertBrand(
+                fullName = "companyName",
+                url = "companyUrl",
+                email = "companyEmail"
             )
-            val brand = brandRepository.addNewBrand(signUpDto)
+            val brand = brandRepository.addNewBrand(insertBrand)
 
             val insertToken = InsertBrandToken(
                 bId = brand.id,
@@ -77,7 +167,7 @@ internal class BrandTokenRepositoryTest : AbstractIntegrationTest() {
             brandTokenRepository.saveTokenForBrandId(insertToken)
 
             val actual = brandTokenRepository.getByBrandId(brand.id)
-            Assertions.assertThat(actual)
+            assertThat(actual)
                 .isEqualToIgnoringGivenFields(expected, "id")
                 .hasNoNullFieldsOrProperties()
         }

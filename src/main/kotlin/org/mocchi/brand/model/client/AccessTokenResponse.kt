@@ -13,8 +13,10 @@ data class AccessTokenResponse(
 )
 
 data class AssociatedUser(
-    private val id: Long,
-    private val firstName: String,
-    private val lastName: String,
-    private val email: String
+    val id: Long,
+    @JsonProperty("first_name")
+    val firstName: String,
+    @JsonProperty("last_name")
+    val lastName: String,
+    val email: String
 )

@@ -15,10 +15,10 @@ class StateCodeRepository(
     private val insertConverter: StateCodeConverter
 ) {
 
-    suspend fun saveNewCode(brandId: Long): StateCode =
+    suspend fun saveNewCode(url: String): StateCode =
         databaseClient.insert()
             .into(InsertStateCode::class.java)
-            .using(InsertStateCode(brandId))
+            .using(InsertStateCode(url))
             .fetch()
             .awaitFirst()
             .let { insertConverter.convert(it) }
