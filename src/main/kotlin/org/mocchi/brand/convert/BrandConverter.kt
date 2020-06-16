@@ -12,13 +12,4 @@ class BrandAfterInsertConverter : Converter<Map<String, Any>, Brand> {
             url = extractFromResultSet(source, "b_url"),
             email = extractFromResultSet(source, "b_email")
         )
-
-    private inline fun <reified T : Any> extractFromResultSet(
-        map: Map<String, Any>,
-        field: String
-    ): T =
-        (map[field] ?: throw RuntimeException("$field doesn't exist"))
-            .takeIf { it is T }
-            .let { it as T }
-
 }
