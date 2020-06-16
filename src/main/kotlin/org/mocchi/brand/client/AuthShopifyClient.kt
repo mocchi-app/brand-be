@@ -14,7 +14,7 @@ import org.springframework.validation.annotation.Validated
 import javax.validation.constraints.NotBlank
 
 @Component
-class ShopifyClient(
+class AuthShopifyClient(
     private val httpClient: HttpClient,
     private val shopifyProperties: ShopifyProperties
 ) {
@@ -37,7 +37,6 @@ class ShopifyClient(
                 protocol = HTTPS
             }
         }
-
 }
 
 @Validated

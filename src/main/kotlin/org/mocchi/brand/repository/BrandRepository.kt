@@ -18,16 +18,10 @@ class BrandRepository(
     private val brandAfterInsertConverter: BrandAfterInsertConverter
 ) {
 
-    suspend fun addNewBrand(signUpDto: SignUpDto): Brand =
+    suspend fun addNewBrand(insertBrand: InsertBrand): Brand =
         databaseClient.insert()
             .into(InsertBrand::class.java)
-            .using(
-                InsertBrand(
-                    fullName = signUpDto.companyName,
-                    url = signUpDto.companyUrl,
-                    email = signUpDto.companyEmail
-                )
-            )
+            .using(insertBrand)
             .fetch()
             .awaitFirst()
             .let { brandAfterInsertConverter.convert(it) }

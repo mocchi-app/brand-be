@@ -1,14 +1,13 @@
 package org.mocchi.brand.service
 
-import org.mocchi.brand.client.ShopifyClient
-import org.mocchi.brand.model.client.AuthBody
+import org.mocchi.brand.client.AuthShopifyClient
 import org.springframework.stereotype.Service
 
 @Service
 class ShopifyService(
-    private val shopifyClient: ShopifyClient
+    private val authShopifyClient: AuthShopifyClient
 ) {
 
     suspend fun validateResponse(shop: String, code: String) =
-        shopifyClient.getAccessToken(shop, code)
+        authShopifyClient.getAccessToken(shop, code)
 }

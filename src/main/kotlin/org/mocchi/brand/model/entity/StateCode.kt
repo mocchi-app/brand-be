@@ -8,12 +8,12 @@ import org.springframework.data.relational.core.mapping.Table
 data class StateCode(
     @Column("sc_id")
     val id: Long,
-    @Column("sc_b_id")
-    val brandId: Long
+    @Column("sc_url")
+    val url: String
 )
 
 @Table("state_code")
 data class InsertStateCode(
-    @Column("sc_b_id")
-    val brandId: Long
+    @Column("sc_url")
+    val url: String
 )
