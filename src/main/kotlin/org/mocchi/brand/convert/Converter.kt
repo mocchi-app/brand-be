@@ -4,6 +4,10 @@ interface Converter<T1, T2> {
     fun convert(source: T1): T2
 }
 
+interface BiConverter<T, U, R> {
+    fun convert(t: T, u: U): R
+}
+
 inline fun <reified T> extractFromResultSet(
     map: Map<String, Any>,
     field: String
