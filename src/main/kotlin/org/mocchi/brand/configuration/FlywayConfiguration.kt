@@ -1,6 +1,7 @@
 package org.mocchi.brand.configuration
 
 import org.postgresql.ds.PGSimpleDataSource
+import org.springframework.boot.autoconfigure.quartz.QuartzDataSource
 import org.springframework.boot.jdbc.DataSourceBuilder
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -18,4 +19,13 @@ class FlywayConfiguration {
             .password(databaseProperties.password)
             .build()
 
+    @Bean
+    @QuartzDataSource
+    fun quartzDataSource(databaseProperties: DatabaseProperties) = DataSourceBuilder.create()
+        .driverClassName("org.postgresql.Driver")
+        .type(PGSimpleDataSource::class.java)
+        .url("jdbc:postgresql://${databaseProperties.host}:${databaseProperties.port}/quartz")
+        .username(databaseProperties.username)
+        .password(databaseProperties.password)
+        .build()
 }

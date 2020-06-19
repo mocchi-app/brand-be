@@ -40,10 +40,3 @@ CREATE TABLE brand_products
     bp_variants        JSONB,
     UNIQUE (bp_b_id, bp_shopify_id)
 );
-
-CREATE TABLE sync_job
-(
-    sj_id             BIGSERIAL PRIMARY KEY,
-    sj_b_id           BIGINT REFERENCES brand (b_id),
-    sj_last_sync_date TIMESTAMP DEFAULT now()
-);

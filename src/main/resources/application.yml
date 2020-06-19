@@ -8,3 +8,9 @@ db:
 shopify:
   clientId: ${API_KEY}
   clientSecret: ${API_SECRET_KEY}
+
+spring:
+  quartz:
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: ALWAYS

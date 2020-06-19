@@ -6,6 +6,7 @@ import org.mocchi.brand.model.entity.Brand
 import org.mocchi.brand.model.entity.InsertBrand
 import org.mocchi.brand.model.entity.InsertBrandToken
 import org.mocchi.brand.repository.StateCodeRepository
+import org.mocchi.brand.schedule.BrandSyncJobService
 import org.springframework.stereotype.Service
 
 @Service
@@ -13,7 +14,8 @@ class SignUpService(
     private val brandService: BrandService,
     private val brandTokenService: BrandTokenService,
     private val stateCodeRepository: StateCodeRepository,
-    private val shopifyService: ShopifyService
+    private val shopifyService: ShopifyService,
+    private val brandSyncJobService: BrandSyncJobService
 ) {
     suspend fun signUpBrand(signUpDto: SignUpDto): Long =
         stateCodeRepository.saveNewCode(signUpDto.companyUrl).id
@@ -30,7 +32,11 @@ class SignUpService(
                         brandTokenService.insertOrUpdateTokenForBrand(
                             insertBrandToken(brand, tokenResponse)
                         )
+                        brand
                     }
+            }
+            ?.also {
+                brandSyncJobService.startSyncProcessForBrand(it.id)
             }
             ?: throw RuntimeException("Unable to find code")
 

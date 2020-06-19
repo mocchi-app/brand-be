@@ -10,3 +10,9 @@ data class SyncJob(
     @Column("sj_b_id") val brandId: Long,
     @Column("sj_last_sync_date") val lastSyncDate: LocalDateTime
 )
+
+@Table("sync_job")
+data class InsertSyncJob(
+    @Column("sj_b_id") val brandId: Long,
+    @Column("sj_last_sync_date") val lastSyncDate: LocalDateTime
+)
