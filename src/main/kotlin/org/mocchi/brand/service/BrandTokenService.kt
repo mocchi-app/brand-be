@@ -10,7 +10,7 @@ class BrandTokenService(
 ) {
 
     suspend fun insertOrUpdateTokenForBrand(insertBrandToken: InsertBrandToken) =
-        brandTokenRepository.getByBrandId(insertBrandToken.bId)
+        brandTokenRepository.getByBrandId(insertBrandToken.brandId)
             ?.also { brandTokenRepository.updateTokeForBrand(insertBrandToken) }
             ?: brandTokenRepository.saveTokenForBrandId(insertBrandToken)
 }

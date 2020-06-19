@@ -18,14 +18,4 @@ class FlywayConfiguration {
             .username(databaseProperties.username)
             .password(databaseProperties.password)
             .build()
-
-    @Bean
-    @QuartzDataSource
-    fun quartzDataSource(databaseProperties: DatabaseProperties) = DataSourceBuilder.create()
-        .driverClassName("org.postgresql.Driver")
-        .type(PGSimpleDataSource::class.java)
-        .url("jdbc:postgresql://${databaseProperties.host}:${databaseProperties.port}/quartz")
-        .username(databaseProperties.username)
-        .password(databaseProperties.password)
-        .build()
 }

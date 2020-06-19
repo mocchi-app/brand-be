@@ -13,4 +13,9 @@ spring:
   quartz:
     job-store-type: jdbc
     jdbc:
-      initialize-schema: ALWAYS
+      initialize-schema: NEVER
+    properties:
+      org:
+        quartz:
+          jobStore:
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.PostgreSQLDelegate

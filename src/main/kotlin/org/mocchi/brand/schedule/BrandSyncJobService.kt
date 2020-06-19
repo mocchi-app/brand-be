@@ -18,7 +18,7 @@ class BrandSyncJobService(
                 .withSchedule(
                     simpleSchedule()
                         .repeatForever()
-                        .withIntervalInSeconds(5)
+                        .withIntervalInSeconds(60)
                 )
                 .build()
         )

@@ -23,7 +23,7 @@ data class BrandToken(
 @Table("brand_token")
 data class InsertBrandToken(
     @Column("t_b_id")
-    val bId: Long,
+    val brandId: Long,
     @Column("t_token")
     val token: String,
     @Column("t_scope")
