@@ -1,6 +1,7 @@
 package org.mocchi.brand.configuration
 
 import org.postgresql.ds.PGSimpleDataSource
+import org.springframework.boot.autoconfigure.quartz.QuartzDataSource
 import org.springframework.boot.jdbc.DataSourceBuilder
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
@@ -17,5 +18,4 @@ class FlywayConfiguration {
             .username(databaseProperties.username)
             .password(databaseProperties.password)
             .build()
-
 }

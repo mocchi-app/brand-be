@@ -28,7 +28,7 @@ internal class BrandTokenRepositoryTest : AbstractIntegrationTest() {
             val brand = brandRepository.addNewBrand(insertBrand)
 
             val insertToken = InsertBrandToken(
-                bId = brand.id,
+                brandId = brand.id,
                 token = "token",
                 scope = "scope",
                 expiresIn = 1000
@@ -58,7 +58,7 @@ internal class BrandTokenRepositoryTest : AbstractIntegrationTest() {
             val brand = brandRepository.addNewBrand(insertBrand)
 
             val insertToken = InsertBrandToken(
-                bId = brand.id,
+                brandId = brand.id,
                 token = "token",
                 scope = "scope",
                 expiresIn = 1000
@@ -76,7 +76,7 @@ internal class BrandTokenRepositoryTest : AbstractIntegrationTest() {
                 .hasNoNullFieldsOrProperties()
 
             val updateToken = InsertBrandToken(
-                bId = brand.id,
+                brandId = brand.id,
                 token = "token2",
                 scope = "scope2",
                 expiresIn = 1001
@@ -108,7 +108,7 @@ internal class BrandTokenRepositoryTest : AbstractIntegrationTest() {
             val brand = brandRepository.addNewBrand(insertBrand)
 
             val insertToken = InsertBrandToken(
-                bId = brand.id,
+                brandId = brand.id,
                 token = "token",
                 scope = "scope",
                 expiresIn = 1000
@@ -126,7 +126,7 @@ internal class BrandTokenRepositoryTest : AbstractIntegrationTest() {
                 .hasNoNullFieldsOrProperties()
 
             val updateToken = InsertBrandToken(
-                bId = -1,
+                brandId = -1,
                 token = "token2",
                 scope = "scope2",
                 expiresIn = 1001
@@ -152,7 +152,7 @@ internal class BrandTokenRepositoryTest : AbstractIntegrationTest() {
             val brand = brandRepository.addNewBrand(insertBrand)
 
             val insertToken = InsertBrandToken(
-                bId = brand.id,
+                brandId = brand.id,
                 token = "token",
                 scope = "scope",
                 expiresIn = 1000

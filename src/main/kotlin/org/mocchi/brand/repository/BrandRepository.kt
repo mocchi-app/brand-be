@@ -1,8 +1,10 @@
 package org.mocchi.brand.repository
 
-import com.fasterxml.jackson.databind.ObjectMapper
+import kotlinx.coroutines.reactive.awaitFirstOrNull
 import org.mocchi.brand.convert.BrandAfterInsertConverter
+import org.mocchi.brand.convert.BrandWithTokenConverter
 import org.mocchi.brand.model.entity.Brand
+import org.mocchi.brand.model.entity.BrandWithToken
 import org.mocchi.brand.model.entity.InsertBrand
 import org.springframework.data.r2dbc.core.DatabaseClient
 import org.springframework.data.r2dbc.core.awaitFirst
@@ -13,8 +15,8 @@ import org.springframework.stereotype.Repository
 @Repository
 class BrandRepository(
     private val databaseClient: DatabaseClient,
-    private val objectMapper: ObjectMapper,
-    private val brandAfterInsertConverter: BrandAfterInsertConverter
+    private val brandAfterInsertConverter: BrandAfterInsertConverter,
+    private val brandWithTokenConverter: BrandWithTokenConverter
 ) {
 
     suspend fun addNewBrand(insertBrand: InsertBrand): Brand =
@@ -32,5 +34,17 @@ class BrandRepository(
                 Criteria.where("b_url").`is`(brandUrl)
             )
             .fetch()
+            .awaitFirstOrNull()
+
+    suspend fun getByIdJoinWithToken(brandId: Long): BrandWithToken? =
+        databaseClient.execute(
+            """
+            SELECT * FROM brand b JOIN brand_token bt on b.b_id = bt.t_b_id
+            WHERE b.b_id = $brandId
+        """.trimIndent()
+        )
+            .fetch()
+            .first()
+            .map { brandWithTokenConverter.convert(it) }
             .awaitFirstOrNull()
 }

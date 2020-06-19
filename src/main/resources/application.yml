@@ -8,3 +8,14 @@ db:
 shopify:
   clientId: ${API_KEY}
   clientSecret: ${API_SECRET_KEY}
+
+spring:
+  quartz:
+    job-store-type: jdbc
+    jdbc:
+      initialize-schema: NEVER
+    properties:
+      org:
+        quartz:
+          jobStore:
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.PostgreSQLDelegate

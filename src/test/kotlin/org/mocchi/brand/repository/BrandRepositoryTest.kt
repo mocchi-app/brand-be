@@ -6,7 +6,9 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.mocchi.brand.AbstractIntegrationTest
 import org.mocchi.brand.model.entity.Brand
+import org.mocchi.brand.model.entity.BrandWithToken
 import org.mocchi.brand.model.entity.InsertBrand
+import org.mocchi.brand.model.entity.InsertBrandToken
 import org.springframework.beans.factory.annotation.Autowired
 
 internal class BrandRepositoryTest : AbstractIntegrationTest() {
@@ -14,21 +16,20 @@ internal class BrandRepositoryTest : AbstractIntegrationTest() {
     @Autowired
     private lateinit var brandRepository: BrandRepository
 
+    @Autowired
+    private lateinit var brandTokenRepository: BrandTokenRepository
+
     @Test
     fun `should insert new brand`() {
         runBlocking {
-            val signUpDto = InsertBrand(
-                fullName = "companyName",
-                url = "companyUrl",
-                email = "companyEmail"
-            )
+            val insertBrand = insertBrand()
             val expected = Brand(
                 id = 1,
                 fullName = "companyName",
                 url = "companyUrl",
                 email = "companyEmail"
             )
-            val actual = brandRepository.addNewBrand(signUpDto)
+            val actual = brandRepository.addNewBrand(insertBrand)
             assertThat(actual)
                 .isEqualToIgnoringGivenFields(expected, "id")
                 .hasNoNullFieldsOrProperties()
@@ -38,25 +39,21 @@ internal class BrandRepositoryTest : AbstractIntegrationTest() {
     @Test
     fun `should fail for new brand when url exists`() {
         runBlocking {
-            val signUpDto = InsertBrand(
-                fullName = "companyName",
-                url = "companyUrl",
-                email = "companyEmail"
-            )
+            val insertBrand = insertBrand()
             val expected = Brand(
                 id = 1,
                 fullName = "companyName",
                 url = "companyUrl",
                 email = "companyEmail"
             )
-            val actual = brandRepository.addNewBrand(signUpDto)
+            val actual = brandRepository.addNewBrand(insertBrand)
             assertThat(actual)
                 .isEqualToIgnoringGivenFields(expected, "id")
                 .hasNoNullFieldsOrProperties()
 
             assertThrows<RuntimeException> {
                 runBlocking {
-                    brandRepository.addNewBrand(signUpDto)
+                    brandRepository.addNewBrand(insertBrand)
                 }
             }
         }
@@ -65,11 +62,7 @@ internal class BrandRepositoryTest : AbstractIntegrationTest() {
     @Test
     fun `should find existing brand`() {
         runBlocking {
-            val signUpDto = InsertBrand(
-                fullName = "companyName",
-                url = "companyUrl",
-                email = "companyEmail"
-            )
+            val signUpDto = insertBrand()
             val expected = Brand(
                 id = 1,
                 fullName = "companyName",
@@ -86,5 +79,36 @@ internal class BrandRepositoryTest : AbstractIntegrationTest() {
                 .isEqualToIgnoringGivenFields(expected, "id")
                 .hasNoNullFieldsOrProperties()
         }
+    }
+
+    @Test
+    fun `should get brand joined with token when id exists`() {
+        runBlocking {
+            val insertBrand = insertBrand()
+            val brand = brandRepository.addNewBrand(insertBrand)
+            assertThat(brand).hasNoNullFieldsOrProperties()
+
+            val token = brandTokenRepository.saveTokenForBrandId(
+                InsertBrandToken(
+                    brandId = brand.id,
+                    token = "token",
+                    expiresIn = 100,
+                    scope = "scope"
+                )
+            )
+            val actual = brandRepository.getByIdJoinWithToken(brand.id)
+            val expected = BrandWithToken(
+                brand.id, brand.fullName, brand.url, brand.email, token.token, token.scope, token.expiresIn
+            )
+            assertThat(actual).isEqualTo(expected)
+        }
+    }
+
+    private fun insertBrand(): InsertBrand {
+        return InsertBrand(
+            fullName = "companyName",
+            url = "companyUrl",
+            email = "companyEmail"
+        )
     }
 }

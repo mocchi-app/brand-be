@@ -3,9 +3,7 @@ package org.mocchi.brand
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mocchi.brand.model.entity.Brand
-import org.mocchi.brand.model.entity.BrandToken
-import org.mocchi.brand.model.entity.StateCode
+import org.mocchi.brand.model.entity.*
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.web.server.LocalServerPort
@@ -50,6 +48,11 @@ abstract class AbstractIntegrationTest {
 
             databaseClient.delete()
                 .from(StateCode::class.java)
+                .fetch()
+                .awaitRowsUpdated()
+
+            databaseClient.delete()
+                .from(BrandProduct::class.java)
                 .fetch()
                 .awaitRowsUpdated()
 
