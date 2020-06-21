@@ -1,9 +1,11 @@
 package org.mocchi.brand.controller
 
-import org.mocchi.brand.model.client.AuthBody
 import org.mocchi.brand.model.controller.SignUpDto
-import org.mocchi.brand.service.ShopifyService
 import org.mocchi.brand.service.SignUpService
+import org.springframework.security.authentication.AnonymousAuthenticationToken
+import org.springframework.security.core.authority.SimpleGrantedAuthority
+import org.springframework.security.core.context.ReactiveSecurityContextHolder
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
 
 @RestController
