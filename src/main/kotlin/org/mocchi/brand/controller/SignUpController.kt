@@ -13,8 +13,16 @@ class SignUpController(
 ) {
 
     @PostMapping("/signup")
-    suspend fun signUpBrand(@RequestBody signUpDto: SignUpDto): Long =
+    suspend fun signUpBrand(@RequestBody signUpDto: SignUpDto): String =
         signUpService.signUpBrand(signUpDto)
+            .let {
+                "https://${signUpDto.companyUrl}/admin/oauth/authorize" +
+                        "?client_id=d1573479b208211e6c983a2688891523" +
+                        "&scope=read_customers,read_products" +
+                        "&redirect_uri=http://localhost:8080/api/v1/brand/complete" +
+                        "&state=$it" +
+                        "&grant_options[]=per-user"
+            }
 
     @GetMapping("/complete")
     suspend fun completeAuthentication(

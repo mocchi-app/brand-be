@@ -8,7 +8,6 @@ import org.mocchi.brand.model.entity.InsertBrandToken
 import org.mocchi.brand.repository.StateCodeRepository
 import org.mocchi.brand.schedule.BrandSyncJobService
 import org.springframework.stereotype.Service
-import org.springframework.transaction.annotation.Transactional
 
 @Service
 class SignUpService(
