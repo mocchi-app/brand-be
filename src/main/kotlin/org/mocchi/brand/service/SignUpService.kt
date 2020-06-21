@@ -32,7 +32,6 @@ class SignUpService(
                         brandTokenService.insertOrUpdateTokenForBrand(
                             insertBrandToken(brand, tokenResponse)
                         )
-                        brand
                     }
             }
             ?.also {

@@ -9,6 +9,7 @@ class JobFactory {
 
     fun createJobForBrand(brandId: Long): JobDetail =
         JobBuilder.newJob()
+            .withIdentity(brandId.toString())
             .ofType(BrandSyncJob::class.java)
             .usingJobData("brandId", brandId)
             .build()
