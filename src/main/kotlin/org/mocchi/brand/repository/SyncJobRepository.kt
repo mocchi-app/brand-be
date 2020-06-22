@@ -5,7 +5,6 @@ import org.mocchi.brand.convert.SyncJobConverter
 import org.mocchi.brand.model.entity.InsertSyncJob
 import org.mocchi.brand.model.entity.SyncJob
 import org.springframework.data.r2dbc.core.DatabaseClient
-import org.springframework.data.r2dbc.core.awaitFirst
 import org.springframework.data.r2dbc.core.awaitFirstOrNull
 import org.springframework.data.relational.core.query.Criteria
 import org.springframework.stereotype.Repository
