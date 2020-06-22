@@ -2,7 +2,6 @@ package org.mocchi.brand.configuration
 
 import io.r2dbc.spi.ConnectionFactories
 import io.r2dbc.spi.ConnectionFactory
-import io.r2dbc.spi.ConnectionFactoryOptions
 import io.r2dbc.spi.ConnectionFactoryOptions.*
 import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Bean
@@ -10,23 +9,27 @@ import org.springframework.context.annotation.Configuration
 import org.springframework.data.r2dbc.core.DatabaseClient
 import org.springframework.stereotype.Component
 import org.springframework.validation.annotation.Validated
+import java.net.URI
 import javax.validation.constraints.NotBlank
 
 @Configuration
 class PostgresConfiguration {
 
     @Bean
-    fun postgresqlConnectionFactory(databaseProperty: DatabaseProperties): ConnectionFactory = ConnectionFactories.get(
-        ConnectionFactoryOptions.builder()
-            .option(DRIVER, "pool")
-            .option(PROTOCOL, "postgresql")
-            .option(HOST, databaseProperty.host)
-            .option(PORT, databaseProperty.port)
-            .option(USER, databaseProperty.username)
-            .option(PASSWORD, databaseProperty.password)
-            .option(DATABASE, databaseProperty.database)
-            .build()
-    )
+    fun postgresqlConnectionFactory(databaseProperty: DatabaseProperties): ConnectionFactory =
+        URI(databaseProperty.url).let {
+            ConnectionFactories.get(
+                builder()
+                    .option(DRIVER, "pool")
+                    .option(PROTOCOL, "postgresql")
+                    .option(HOST, it.host)
+                    .option(PORT, it.port)
+                    .option(USER, databaseProperty.username)
+                    .option(PASSWORD, databaseProperty.password)
+                    .option(DATABASE, it.path.replace("/", ""))
+                    .build()
+            )
+        }
 
     @Bean
     fun databaseClient(postgresqlConnectionFactory: ConnectionFactory): DatabaseClient =
@@ -39,12 +42,7 @@ class PostgresConfiguration {
 class DatabaseProperties {
 
     @NotBlank
-    lateinit var host: String
-
-    @NotBlank
-    lateinit var database: String
-
-    var port: Int = 0
+    lateinit var url: String
 
     @NotBlank
     lateinit var username: String

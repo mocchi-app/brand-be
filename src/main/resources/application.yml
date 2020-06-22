@@ -1,9 +1,7 @@
 db:
-  host: localhost
-  port: 5432
-  database: mocchi
-  username: mocchi
-  password: mocchi
+  url: ${JDBC_DATABASE_URL:postgresql://localhost:5432/mocchi}
+  username: ${JDBC_DATABASE_USERNAME:mocchi}
+  password: ${JDBC_DATABASE_PASSWORD:mocchi}
 
 shopify:
   clientId: ${API_KEY}
