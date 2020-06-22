@@ -4,7 +4,7 @@ import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
 
 @SpringBootApplication
-open class BrandApplication
+class BrandApplication
 
 fun main(args: Array<String>) {
     SpringApplication.run(BrandApplication::class.java, *args)
