@@ -2,6 +2,7 @@ package org.mocchi.brand.controller
 
 import org.mocchi.brand.configuration.OauthRedirectProperties
 import org.mocchi.brand.model.controller.SignUpDto
+import org.mocchi.brand.model.controller.SignUpResponse
 import org.mocchi.brand.service.SignUpService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -16,8 +17,10 @@ class SignUpController(
 ) {
 
     @PostMapping("/signup")
-    suspend fun signUpBrand(@RequestBody signUpDto: SignUpDto): String =
-        signUpService.signUpBrand(signUpDto)
+    suspend fun signUpBrand(@RequestBody signUpDto: SignUpDto): SignUpResponse =
+        SignUpResponse(
+            signUpUrl = signUpService.signUpBrand(signUpDto)
+        )
 
     @GetMapping("/complete")
     suspend fun completeAuthentication(
