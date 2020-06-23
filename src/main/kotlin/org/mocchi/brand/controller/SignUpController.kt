@@ -29,7 +29,7 @@ class SignUpController(
         @RequestParam("shop") shop: String,
         @RequestParam("state") state: Long,
         response: ServerHttpResponse
-    ) =
+    ): ResponseEntity<Any> =
         signUpService.completeLogin(shop, code, state)
             .let {
                 ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT)
