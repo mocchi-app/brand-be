@@ -19,6 +19,7 @@ class SecuityConfiguration {
             .httpBasic().disable()
             .formLogin().disable()
             .csrf().disable()
+            .cors().disable()
             .logout().disable()
             .securityContextRepository(serverSecurityContextRepository)
             .authorizeExchange()

@@ -7,6 +7,10 @@ shopify:
   clientId: ${API_KEY}
   clientSecret: ${API_SECRET_KEY}
 
+oauth:
+  serverRedirect: ${SERVER_REDIRECT_URL:http://localhost:8080}
+  frontRedirect: ${FRONT_REDIRECT_URL:http://localhost:3000}
+
 spring:
   quartz:
     job-store-type: jdbc
