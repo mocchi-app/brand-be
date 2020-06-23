@@ -6,6 +6,7 @@ import kotlinx.coroutines.reactive.asFlow
 import org.mocchi.brand.convert.BrandProductConverter
 import org.mocchi.brand.model.entity.BrandProduct
 import org.mocchi.brand.model.entity.InsertBrandProduct
+import org.springframework.data.domain.Sort
 import org.springframework.data.r2dbc.core.DatabaseClient
 import org.springframework.stereotype.Repository
 
@@ -62,6 +63,14 @@ class BrandProductRepository(
                         brandProductConverter.convert(it)
                     }
             }
+
+    fun selectAll(): Flow<BrandProduct> =
+        databaseClient.select()
+            .from(BrandProduct::class.java)
+            .orderBy(Sort.by("bp_created_at"))
+            .fetch()
+            .all()
+            .asFlow()
 
     private fun nullOrString(nullable: String?) =
         nullable?.let { "'$nullable'" } ?: "null"
