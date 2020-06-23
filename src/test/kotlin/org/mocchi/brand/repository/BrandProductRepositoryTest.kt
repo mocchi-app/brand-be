@@ -115,6 +115,37 @@ internal class BrandProductRepositoryTest : AbstractIntegrationTest() {
         }
     }
 
+    @Test
+    fun `should select all products`() {
+        runBlocking {
+            val brand = brandRepository.addNewBrand(
+                InsertBrand(
+                    "fullName",
+                    "url",
+                    "email"
+                )
+            )
+
+            val firstBrand = generateBrandProduct(brand.id, 1)
+            val secondBrand = generateBrandProduct(brand.id, 2)
+            brandProductRepository.insertBrandProduct(
+                listOf(firstBrand, secondBrand)
+            ).asFlux().collectList().awaitFirst()
+
+            val actual = brandProductRepository.selectAll()
+                .asFlux().collectList().awaitFirst()
+
+            assertThat(actual)
+                .hasSize(2)
+            assertThat(actual[0])
+                .hasNoNullFieldsOrProperties()
+                .isEqualToIgnoringGivenFields(firstBrand, "id", "variants")
+            assertThat(actual[1])
+                .hasNoNullFieldsOrProperties()
+                .isEqualToIgnoringGivenFields(secondBrand, "id", "variants")
+        }
+    }
+
     private fun generateBrandProduct(brandId: Long, shopifyId: Long) = InsertBrandProduct(
         brandId = brandId,
         shopifyId = shopifyId,

@@ -11,5 +11,4 @@ class BrandService(
 ) {
     suspend fun insertOrFindBrand(insertBrand: InsertBrand): Brand =
         brandRepository.getByUrl(insertBrand.url) ?: brandRepository.addNewBrand(insertBrand)
-
 }
