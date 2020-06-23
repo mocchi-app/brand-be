@@ -11,6 +11,10 @@ oauth:
   serverRedirect: ${SERVER_REDIRECT_URL:http://localhost:8080}
   frontRedirect: ${FRONT_REDIRECT_URL:http://localhost:3000}
 
+brand:
+  sync:
+    periodInMinutes: ${SYNC_PERIOD_TIME:10080}
+
 spring:
   quartz:
     job-store-type: jdbc
