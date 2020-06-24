@@ -1,10 +1,13 @@
 package org.mocchi.brand.repository
 
+import kotlinx.coroutines.reactive.awaitFirst
+import kotlinx.coroutines.reactive.awaitFirstOrNull
 import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.mocchi.brand.AbstractIntegrationTest
 import org.mocchi.brand.model.entity.BrandToken
+import org.mocchi.brand.model.entity.BrandWithToken
 import org.mocchi.brand.model.entity.InsertBrand
 import org.mocchi.brand.model.entity.InsertBrandToken
 import org.springframework.beans.factory.annotation.Autowired
@@ -140,7 +143,6 @@ internal class BrandTokenRepositoryTest : AbstractIntegrationTest() {
         }
     }
 
-
     @Test
     fun `should find existing brand`() {
         runBlocking {
@@ -170,6 +172,56 @@ internal class BrandTokenRepositoryTest : AbstractIntegrationTest() {
             assertThat(actual)
                 .isEqualToIgnoringGivenFields(expected, "id")
                 .hasNoNullFieldsOrProperties()
+        }
+    }
+
+    @Test
+    fun `should return null when brand doesn't exist`() {
+        runBlocking {
+            val actual = brandTokenRepository.getByBrandId(0)
+            assertThat(actual).isNull()
+        }
+    }
+
+    @Test
+    fun `should find existing brand by token`() {
+        runBlocking {
+            val insertBrand = InsertBrand(
+                fullName = "companyName",
+                url = "companyUrl",
+                email = "companyEmail"
+            )
+            val brand = brandRepository.addNewBrand(insertBrand)
+
+            val insertToken = InsertBrandToken(
+                brandId = brand.id,
+                token = "token",
+                scope = "scope",
+                expiresIn = 1000
+            )
+            val token = BrandToken(
+                id = 1,
+                bId = brand.id,
+                token = "token",
+                scope = "scope",
+                expiresIn = 1000
+            )
+            brandTokenRepository.saveTokenForBrandId(insertToken)
+
+            val actual = brandTokenRepository.getBrandByToken(insertToken.token)
+                .awaitFirst()
+            val expected = BrandWithToken(
+                brand.id, brand.fullName, brand.url, brand.email, token.token, token.scope, token.expiresIn
+            )
+            assertThat(actual).isEqualTo(expected)
+        }
+    }
+
+    @Test
+    fun `should return empty mono when token doesn't exist`() {
+        runBlocking {
+            val actual = brandTokenRepository.getBrandByToken("doesn't exist")
+            assertThat(actual.awaitFirstOrNull()).isNull()
         }
     }
 }
