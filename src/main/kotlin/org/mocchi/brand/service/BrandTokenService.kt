@@ -10,6 +10,9 @@ class BrandTokenService(
     private val brandTokenRepository: BrandTokenRepository
 ) {
 
+    fun getBrandByToken(token: String) =
+        brandTokenRepository.getBrandByToken(token)
+
     suspend fun insertOrUpdateTokenForBrand(insertBrandToken: InsertBrandToken): BrandToken =
         brandTokenRepository.getByBrandId(insertBrandToken.brandId)
             ?.also { brandTokenRepository.updateTokeForBrand(insertBrandToken) }

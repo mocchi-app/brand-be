@@ -1,6 +1,7 @@
 package org.mocchi.brand.configuration
 
 import org.springframework.context.annotation.Bean
+import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity
 import org.springframework.security.config.web.server.ServerHttpSecurity
 import org.springframework.security.web.server.SecurityWebFilterChain
@@ -13,7 +14,8 @@ class SecuityConfiguration {
     @Bean
     fun securityWebFilterChain(
         http: ServerHttpSecurity,
-        serverSecurityContextRepository: ServerSecurityContextRepository
+        serverSecurityContextRepository: ServerSecurityContextRepository,
+        reactiveAuthenticationManager: ReactiveAuthenticationManager
     ): SecurityWebFilterChain =
         http
             .httpBasic().disable()
@@ -22,6 +24,7 @@ class SecuityConfiguration {
             .cors().disable()
             .logout().disable()
             .securityContextRepository(serverSecurityContextRepository)
+            .authenticationManager(reactiveAuthenticationManager)
             .authorizeExchange()
             .pathMatchers(
                 "/v2/api-docs",
