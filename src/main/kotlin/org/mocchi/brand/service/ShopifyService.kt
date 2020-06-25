@@ -1,5 +1,6 @@
 package org.mocchi.brand.service
 
+import kotlinx.coroutines.flow.flow
 import org.mocchi.brand.client.AuthShopifyClient
 import org.mocchi.brand.client.ProductShopifyClient
 import org.springframework.stereotype.Service
@@ -14,5 +15,15 @@ class ShopifyService(
         authShopifyClient.getAccessToken(shop, code)
 
     suspend fun fetchAllProducts(url: String, token: String) =
-        productShopifyClient.getProductsSince(url, token, null)
+        flow {
+            var sinceId: Long? = null
+            while (true) {
+                val productsSince = productShopifyClient.getProductsSince(url, token, sinceId)
+                if (productsSince.products.isEmpty()) {
+                    break;
+                }
+                sinceId = productsSince.products.lastOrNull()?.shopifyId
+                emit(productsSince.products)
+            }
+        }
 }

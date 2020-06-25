@@ -1,6 +1,8 @@
 package org.mocchi.brand.schedule
 
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.count
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
 import org.mocchi.brand.convert.ShopifyProductConverter
 import org.mocchi.brand.repository.BrandProductRepository
@@ -27,16 +29,16 @@ class BrandSyncJob(
                     brandRepository.getByIdJoinWithToken(brandId)
                         ?.let { brand ->
                             shopifyService.fetchAllProducts(brand.url, brand.token)
-                                .let { response ->
-                                    response.products.map {
+                                .map { products ->
+                                    products.map {
                                         shopifyProductConverter.convert(brandId, it)
                                     }
                                 }
-                                .let {
-                                    brandProductRepository.insertBrandProduct(it)
-                                }
-                                .also {
-                                    log.info("During sync for brand = $brandId ${it.count()} were synced")
+                                .collect { products ->
+                                    brandProductRepository.insertBrandProduct(products)
+                                        .also {
+                                            log.info("During sync for brand = $brandId ${it.count()} were synced")
+                                        }
                                 }
                         }
                 }
