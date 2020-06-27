@@ -32,7 +32,8 @@ class SecuityConfiguration {
                 "/swagger-resources/**",
                 "/configuration/security",
                 "/swagger-ui.html",
-                "/webjars/**"
+                "/webjars/**",
+                "/favicon.ico"
             ).permitAll()
             .pathMatchers("/about").permitAll()
             .pathMatchers("/api/v1/brand/signup").permitAll()
