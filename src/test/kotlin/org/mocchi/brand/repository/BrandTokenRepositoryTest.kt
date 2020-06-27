@@ -33,15 +33,13 @@ internal class BrandTokenRepositoryTest : AbstractIntegrationTest() {
             val insertToken = InsertBrandToken(
                 brandId = brand.id,
                 token = "token",
-                scope = "scope",
-                expiresIn = 1000
+                scope = "scope"
             )
             val expected = BrandToken(
                 id = 1,
                 bId = brand.id,
                 token = "token",
-                scope = "scope",
-                expiresIn = 1000
+                scope = "scope"
             )
             val actual = brandTokenRepository.saveTokenForBrandId(insertToken)
             assertThat(actual)
@@ -63,15 +61,13 @@ internal class BrandTokenRepositoryTest : AbstractIntegrationTest() {
             val insertToken = InsertBrandToken(
                 brandId = brand.id,
                 token = "token",
-                scope = "scope",
-                expiresIn = 1000
+                scope = "scope"
             )
             val expected = BrandToken(
                 id = 1,
                 bId = brand.id,
                 token = "token",
-                scope = "scope",
-                expiresIn = 1000
+                scope = "scope"
             )
             val actual = brandTokenRepository.saveTokenForBrandId(insertToken)
             assertThat(actual)
@@ -81,15 +77,13 @@ internal class BrandTokenRepositoryTest : AbstractIntegrationTest() {
             val updateToken = InsertBrandToken(
                 brandId = brand.id,
                 token = "token2",
-                scope = "scope2",
-                expiresIn = 1001
+                scope = "scope2"
             )
             val expectedUpdated = BrandToken(
                 id = 1,
                 bId = brand.id,
                 token = "token2",
-                scope = "scope2",
-                expiresIn = 1001
+                scope = "scope2"
             )
             assertThat(brandTokenRepository.updateTokeForBrand(updateToken))
                 .isEqualTo(1)
@@ -113,15 +107,13 @@ internal class BrandTokenRepositoryTest : AbstractIntegrationTest() {
             val insertToken = InsertBrandToken(
                 brandId = brand.id,
                 token = "token",
-                scope = "scope",
-                expiresIn = 1000
+                scope = "scope"
             )
             val expected = BrandToken(
                 id = 1,
                 bId = brand.id,
                 token = "token",
-                scope = "scope",
-                expiresIn = 1000
+                scope = "scope"
             )
             val actual = brandTokenRepository.saveTokenForBrandId(insertToken)
             assertThat(actual)
@@ -131,8 +123,7 @@ internal class BrandTokenRepositoryTest : AbstractIntegrationTest() {
             val updateToken = InsertBrandToken(
                 brandId = -1,
                 token = "token2",
-                scope = "scope2",
-                expiresIn = 1001
+                scope = "scope2"
             )
             assertThat(brandTokenRepository.updateTokeForBrand(updateToken))
                 .isEqualTo(0)
@@ -156,15 +147,13 @@ internal class BrandTokenRepositoryTest : AbstractIntegrationTest() {
             val insertToken = InsertBrandToken(
                 brandId = brand.id,
                 token = "token",
-                scope = "scope",
-                expiresIn = 1000
+                scope = "scope"
             )
             val expected = BrandToken(
                 id = 1,
                 bId = brand.id,
                 token = "token",
-                scope = "scope",
-                expiresIn = 1000
+                scope = "scope"
             )
             brandTokenRepository.saveTokenForBrandId(insertToken)
 
@@ -196,22 +185,20 @@ internal class BrandTokenRepositoryTest : AbstractIntegrationTest() {
             val insertToken = InsertBrandToken(
                 brandId = brand.id,
                 token = "token",
-                scope = "scope",
-                expiresIn = 1000
+                scope = "scope"
             )
             val token = BrandToken(
                 id = 1,
                 bId = brand.id,
                 token = "token",
-                scope = "scope",
-                expiresIn = 1000
+                scope = "scope"
             )
             brandTokenRepository.saveTokenForBrandId(insertToken)
 
             val actual = brandTokenRepository.getBrandByToken(insertToken.token)
                 .awaitFirst()
             val expected = BrandWithToken(
-                brand.id, brand.fullName, brand.url, brand.email, token.token, token.scope, token.expiresIn
+                brand.id, brand.fullName, brand.url, brand.email, token.token, token.scope
             )
             assertThat(actual).isEqualTo(expected)
         }

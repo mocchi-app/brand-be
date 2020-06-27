@@ -92,13 +92,12 @@ internal class BrandRepositoryTest : AbstractIntegrationTest() {
                 InsertBrandToken(
                     brandId = brand.id,
                     token = "token",
-                    expiresIn = 100,
                     scope = "scope"
                 )
             )
             val actual = brandRepository.getByIdJoinWithToken(brand.id)
             val expected = BrandWithToken(
-                brand.id, brand.fullName, brand.url, brand.email, token.token, token.scope, token.expiresIn
+                brand.id, brand.fullName, brand.url, brand.email, token.token, token.scope
             )
             assertThat(actual).isEqualTo(expected)
         }

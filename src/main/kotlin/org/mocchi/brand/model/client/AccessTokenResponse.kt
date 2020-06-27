@@ -7,9 +7,9 @@ data class AccessTokenResponse(
     val accessToken: String,
     val scope: String,
     @JsonProperty("expires_in")
-    val expiresIn: Long,
+    val expiresIn: Long?,
     @JsonProperty("associated_user")
-    val associatedUser: AssociatedUser
+    val associatedUser: AssociatedUser?
 )
 
 data class AssociatedUser(

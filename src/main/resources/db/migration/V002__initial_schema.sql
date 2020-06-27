@@ -11,8 +11,7 @@ CREATE TABLE brand_token
     t_id         BIGSERIAL PRIMARY KEY,
     t_b_id       BIGINT REFERENCES brand (b_id) UNIQUE,
     t_token      TEXT NOT NULL,
-    t_scope      TEXT NOT NULL,
-    t_expires_in BIGINT
+    t_scope      TEXT NOT NULL
 );
 
 CREATE TABLE state_code

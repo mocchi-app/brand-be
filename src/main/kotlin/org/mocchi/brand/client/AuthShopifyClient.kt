@@ -23,8 +23,8 @@ class AuthShopifyClient(
         const val TOKEN_URL = "admin/oauth/access_token"
     }
 
-    suspend fun getAccessToken(shop: String, code: String) =
-        httpClient.post<AccessTokenResponse> {
+    suspend fun getAccessToken(shop: String, code: String): AccessTokenResponse =
+        httpClient.post {
             header(HttpHeaders.ContentType, ContentType.Application.Json)
             body = AuthBody(
                 clientId = shopifyProperties.clientId,

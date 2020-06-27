@@ -12,7 +12,6 @@ class BrandWithTokenConverter : Converter<Map<String, Any>, BrandWithToken> {
             url = extractFromResultSet(source, "b_url"),
             email = extractFromResultSet(source, "b_email"),
             token = extractFromResultSet(source, "t_token"),
-            scope = extractFromResultSet(source, "t_scope"),
-            expiresIn = extractFromResultSet(source, "t_expires_in")
+            scope = extractFromResultSet(source, "t_scope")
         )
 }

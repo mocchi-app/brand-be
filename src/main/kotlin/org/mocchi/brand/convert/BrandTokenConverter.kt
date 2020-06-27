@@ -10,7 +10,6 @@ class BrandTokenAfterInsertConverter : Converter<Map<String, Any>, BrandToken> {
             id = extractFromResultSet(source, "t_id"),
             bId = extractFromResultSet(source, "t_b_id"),
             token = extractFromResultSet(source, "t_token"),
-            scope = extractFromResultSet(source, "t_scope"),
-            expiresIn = extractFromResultSet(source, "t_expires_in")
+            scope = extractFromResultSet(source, "t_scope")
         )
 }

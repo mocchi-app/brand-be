@@ -18,13 +18,12 @@ class ProductShopifyClient(
     companion object {
         const val COUNT_URL = "/admin/api/2020-04/products/count.json"
         const val ALL_URL = "/admin/api/2020-04/products.json"
-        const val TOKEN_HEADER = "X-Shopify-Access-Token"
     }
 
     suspend fun countProducts(url: String, token: String): Count =
         httpClient.get(COUNT_URL) {
             headers {
-                header(TOKEN_HEADER, token)
+                header(ShopifyToken.TOKEN_HEADER, token)
             }
             url {
                 host = url
@@ -35,7 +34,7 @@ class ProductShopifyClient(
     suspend fun getProductsSince(url: String, token: String, sinceId: Long?): GetAllProductsResponse =
         httpClient.get(ALL_URL) {
             headers {
-                header(TOKEN_HEADER, token)
+                header(ShopifyToken.TOKEN_HEADER, token)
             }
             url {
                 host = url

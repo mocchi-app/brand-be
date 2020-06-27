@@ -6,6 +6,5 @@ data class BrandWithToken(
     val url: String,
     val email: String,
     val token: String,
-    val scope: String,
-    val expiresIn: Long
+    val scope: String
 )
