@@ -35,7 +35,6 @@ class BrandTokenRepository(
             .using(
                 Update.update("t_token", insertBrandToken.token)
                     .set("t_scope", insertBrandToken.scope)
-                    .set("t_expires_in", insertBrandToken.expiresIn)
             )
             .matching(Criteria.where("t_b_id").`is`(insertBrandToken.brandId))
             .fetch()

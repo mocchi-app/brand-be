@@ -26,11 +26,11 @@ class SignUpController(
     suspend fun completeAuthentication(
         @RequestParam("code") code: String,
         @RequestParam("hmac") hmac: String,
-        @RequestParam("shop") shop: String,
+        @RequestParam("shop") shopUrl: String,
         @RequestParam("state") state: Long,
         response: ServerHttpResponse
     ): ResponseEntity<Any> =
-        signUpService.completeLogin(shop, code, state)
+        signUpService.completeLogin(shopUrl, code, state)
             .let {
                 ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT)
                     .header("location", "${oauthRedirectProperties.frontRedirect}/complete?token=${it.token}")

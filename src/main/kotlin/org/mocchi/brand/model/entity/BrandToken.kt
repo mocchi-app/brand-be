@@ -14,9 +14,7 @@ data class BrandToken(
     @Column("t_token")
     val token: String,
     @Column("t_scope")
-    val scope: String,
-    @Column("t_expires_in")
-    val expiresIn: Long
+    val scope: String
 )
 
 
@@ -27,7 +25,5 @@ data class InsertBrandToken(
     @Column("t_token")
     val token: String,
     @Column("t_scope")
-    val scope: String,
-    @Column("t_expires_in")
-    val expiresIn: Long
+    val scope: String
 )

@@ -1,7 +1,9 @@
 package org.mocchi.brand.service
 
+import org.mocchi.brand.client.ShopShopifyClient
 import org.mocchi.brand.configuration.OauthRedirectProperties
 import org.mocchi.brand.model.client.AccessTokenResponse
+import org.mocchi.brand.model.client.ShopifyShopResponse
 import org.mocchi.brand.model.controller.SignUpDto
 import org.mocchi.brand.model.entity.Brand
 import org.mocchi.brand.model.entity.BrandToken
@@ -18,27 +20,29 @@ class SignUpService(
     private val stateCodeRepository: StateCodeRepository,
     private val shopifyService: ShopifyService,
     private val brandSyncJobService: BrandSyncJobService,
-    private val oauthRedirectProperties: OauthRedirectProperties
+    private val oauthRedirectProperties: OauthRedirectProperties,
+    private val shopShopifyClient: ShopShopifyClient
 ) {
     suspend fun signUpBrand(signUpDto: SignUpDto): String =
         stateCodeRepository.saveNewCode(signUpDto.companyUrl).id
             .let {
                 "https://${signUpDto.companyUrl}/admin/oauth/authorize" +
                         "?client_id=d1573479b208211e6c983a2688891523" +
-                        "&scope=read_customers,read_products" +
+                        "&scope=read_products" +
                         "&redirect_uri=${oauthRedirectProperties.serverRedirect}/api/v1/brand/complete" +
-                        "&state=$it" +
-                        "&grant_options[]=per-user"
+                        "&state=$it"
             }
 
-    suspend fun completeLogin(shop: String, code: String, state: Long): BrandToken =
+    suspend fun completeLogin(shopUrl: String, code: String, state: Long): BrandToken =
         stateCodeRepository.getById(state)
-            ?.takeIf { it.url == shop }
+            ?.takeIf { it.url == shopUrl }
             ?.let {
-                shopifyService.validateResponse(shop, code)
+                shopifyService.validateResponse(shopUrl, code)
                     .let { tokenResponse ->
+                        val shopResponse = shopShopifyClient.getShop(it.url, tokenResponse.accessToken)
+
                         val brand = brandService.insertOrFindBrand(
-                            insertBrand(tokenResponse, shop)
+                            insertBrand(shopResponse, shopUrl)
                         )
                         brandTokenService.insertOrUpdateTokenForBrand(
                             insertBrandToken(brand, tokenResponse)
@@ -55,18 +59,17 @@ class SignUpService(
     ): InsertBrandToken = InsertBrandToken(
         brand.id,
         tokenResponse.accessToken,
-        tokenResponse.scope,
-        tokenResponse.expiresIn
+        tokenResponse.scope
     )
 
     private fun insertBrand(
-        tokenResponse: AccessTokenResponse,
-        shop: String
+        shopResponse: ShopifyShopResponse,
+        shopUrl: String
     ): InsertBrand =
         InsertBrand(
-            "${tokenResponse.associatedUser.firstName} ${tokenResponse.associatedUser.lastName}",
-            shop,
-            tokenResponse.associatedUser.email
+            shopResponse.shop.name,
+            shopUrl,
+            shopResponse.shop.email
         )
 
 }
