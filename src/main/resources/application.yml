@@ -7,6 +7,9 @@ shopify:
   clientId: ${API_KEY}
   clientSecret: ${API_SECRET_KEY}
 
+stripe:
+  apiKey: ${STRIPE_API_KEY}
+
 oauth:
   serverRedirect: ${SERVER_REDIRECT_URL:http://localhost:8080}
   frontRedirect: ${FRONT_REDIRECT_URL:http://localhost:3000}
