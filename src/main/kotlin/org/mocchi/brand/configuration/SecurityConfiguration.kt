@@ -39,6 +39,7 @@ class SecuityConfiguration {
             .pathMatchers("/api/v1/brand/signup").permitAll()
             .pathMatchers("/api/v1/brand/complete").permitAll()
             .pathMatchers("/api/**/brand/**").hasRole("BRAND_ADMIN")
+            .pathMatchers("/api/**/payment/**").hasRole("BRAND_ADMIN")
             .anyExchange().authenticated()
             .and()
             .build()

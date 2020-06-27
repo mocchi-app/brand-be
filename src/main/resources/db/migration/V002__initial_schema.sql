@@ -8,10 +8,10 @@ CREATE TABLE brand
 
 CREATE TABLE brand_token
 (
-    t_id         BIGSERIAL PRIMARY KEY,
-    t_b_id       BIGINT REFERENCES brand (b_id) UNIQUE,
-    t_token      TEXT NOT NULL,
-    t_scope      TEXT NOT NULL
+    t_id    BIGSERIAL PRIMARY KEY,
+    t_b_id  BIGINT REFERENCES brand (b_id) UNIQUE,
+    t_token TEXT NOT NULL,
+    t_scope TEXT NOT NULL
 );
 
 CREATE TABLE state_code
@@ -38,4 +38,13 @@ CREATE TABLE brand_products
     bp_tags            TEXT,
     bp_variants        JSONB,
     UNIQUE (bp_b_id, bp_shopify_id)
+);
+
+CREATE TABLE brand_payment
+(
+    p_id            BIGSERIAL PRIMARY KEY,
+    p_b_id          BIGINT REFERENCES brand (b_id) UNIQUE,
+    p_customer_id   TEXT NOT NULL UNIQUE,
+    p_client_secret TEXT NOT NULL,
+    p_commission    INT  NOT NULL CHECK ( p_commission > 0 AND p_commission < 100 )
 );
