@@ -16,7 +16,6 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2WebFlux
 
 
 @Configuration
-@EnableSwagger2WebFlux
 class SwaggerConfig {
 
     companion object {
