@@ -33,7 +33,7 @@ abstract class AbstractIntegrationTest {
 
             System.setProperty(
                 "db.url",
-                "postgresql://localhost:${dockerContainers.getServicePort("postgres", 5432)}/mocchi"
+                "postgresql://localhost:${dockerContainers.getServicePort("postgres", 5432)}/mocchi-brand"
             )
         }
     }
