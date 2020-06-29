@@ -1,7 +1,7 @@
 plugins {
     id 'java'
     id 'org.jetbrains.kotlin.jvm' version '1.3.72'
-    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
     id 'org.springframework.boot' version '2.3.1.RELEASE'
     id "org.jetbrains.kotlin.plugin.spring" version "1.3.72"
     id "org.flywaydb.flyway" version "6.4.4"
@@ -11,6 +11,7 @@ group 'org.mocchi.brand'
 version '1.0-SNAPSHOT'
 
 repositories {
+    mavenLocal()
     mavenCentral()
     maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
 }
@@ -74,8 +75,8 @@ compileTestKotlin {
 }
 
 flyway {
-    url = 'jdbc:postgresql://localhost:5432/mocchi'
-    user = 'mocchi'
-    password = 'mocchi'
+    url = 'jdbc:postgresql://localhost:5432/mocchi-brand'
+    user = 'mocchi-brand'
+    password = 'mocchi-brand'
     schemas = ['public']
 }

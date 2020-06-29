@@ -1,7 +1,7 @@
 db:
-  url: ${DATABASE_URL:postgresql://localhost:5432/mocchi}
-  username: ${JDBC_DATABASE_USERNAME:mocchi}
-  password: ${JDBC_DATABASE_PASSWORD:mocchi}
+  url: ${DATABASE_URL:postgresql://localhost:5433/mocchi-brand}
+  username: ${JDBC_DATABASE_USERNAME:mocchi-brand}
+  password: ${JDBC_DATABASE_PASSWORD:mocchi-brand}
 
 shopify:
   clientId: ${API_KEY}
@@ -32,4 +32,3 @@ logging:
   level:
     springfox:
       documentation: DEBUG
-

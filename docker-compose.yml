@@ -4,8 +4,8 @@ services:
   postgres:
     image: postgres:12.3
     ports:
-      - 5432:5432
+      - 5433:5432
     environment:
-      POSTGRES_USER: mocchi
-      POSTGRES_PASSWORD: mocchi
-      POSTGRES_DB: mocchi
+      POSTGRES_USER: mocchi-brand
+      POSTGRES_PASSWORD: mocchi-brand
+      POSTGRES_DB: mocchi-brand
