@@ -7,9 +7,8 @@ import org.springframework.security.config.web.server.ServerHttpSecurity
 import org.springframework.security.web.server.SecurityWebFilterChain
 import org.springframework.security.web.server.context.ServerSecurityContextRepository
 
-
 @EnableWebFluxSecurity
-class SecuityConfiguration {
+class SecurityConfiguration {
 
     @Bean
     fun securityWebFilterChain(
@@ -28,6 +27,7 @@ class SecuityConfiguration {
             .authorizeExchange()
             .pathMatchers(
                 "/v2/api-docs",
+                "/v3/api-docs",
                 "/configuration/ui",
                 "/swagger-resources/**",
                 "/configuration/security",
