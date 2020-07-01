@@ -32,7 +32,7 @@ class SecurityConfiguration {
                 "/swagger-resources/**",
                 "/configuration/security",
                 "/swagger-ui.html",
-                "/swagger-ui/index.html",
+                "/swagger-ui/**",
                 "/webjars/**",
                 "/favicon.ico"
             ).permitAll()
