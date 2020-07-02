@@ -5,7 +5,10 @@ plugins {
     id 'org.springframework.boot' version '2.3.1.RELEASE'
     id "org.jetbrains.kotlin.plugin.spring" version "1.3.72"
     id "org.flywaydb.flyway" version "6.4.4"
+    id 'com.bmuschko.docker-remote-api' version '6.4.0'
 }
+
+import com.bmuschko.gradle.docker.tasks.image.*
 
 group 'org.mocchi.brand'
 version '1.0-SNAPSHOT'
@@ -88,4 +91,9 @@ flyway {
     user = 'mocchi-brand'
     password = 'mocchi-brand'
     schemas = ['public']
+}
+
+task buildBrandImage(type: DockerBuildImage) {
+    inputDir = file('.')
+    images.add('docker.pkg.github.com/mocchi_app/brand_be/brand_be:latest')
 }
