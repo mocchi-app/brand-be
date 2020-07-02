@@ -25,7 +25,7 @@ jobs:
     - name: Build with Gradle
       run: ./gradlew build
     - name: Build the Docker image
-#      if: github.ref == 'refs/heads/master'
+      if: github.ref == 'refs/heads/master'
       run: docker login docker.pkg.github.com -u sausageRoll -p ${{ secrets.GITHUB_TOKEN }} && ./gradlew buildBrandImage
     - name: Publish the Docker image
       if: github.ref == 'refs/heads/master'
