@@ -33,7 +33,9 @@ class SignUpController(
         signUpService.completeLogin(shopUrl, code, state)
             .let {
                 ResponseEntity.status(HttpStatus.TEMPORARY_REDIRECT)
-                    .header("location", "${oauthRedirectProperties.frontRedirect}/complete?token=${it.token}")
+                    .header(
+                        "location",
+                        "${oauthRedirectProperties.frontRedirect}/brand/sign-up/complete?token=${it.token}")
                     .build<Any>()
             }
 }
