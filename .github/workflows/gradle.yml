@@ -29,5 +29,5 @@ jobs:
       run: docker login docker.pkg.github.com -u sausageRoll -p ${{ secrets.GITHUB_TOKEN }} && ./gradlew buildBrandImage
     - name: Publish the Docker image
       if: github.ref == 'refs/heads/master'
-      run: docker push docker.pkg.github.com/mocchi_app/brand_be/brand_be:latest
+      run: docker push docker.pkg.github.com/mocchi-app/brand-be/brand-be:latest
 

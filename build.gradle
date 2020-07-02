@@ -95,5 +95,5 @@ flyway {
 
 task buildBrandImage(type: DockerBuildImage) {
     inputDir = file('.')
-    images.add('docker.pkg.github.com/mocchi_app/brand_be/brand_be:latest')
+    images.add('docker.pkg.github.com/mocchi-app/brand-be/brand-be:latest')
 }
