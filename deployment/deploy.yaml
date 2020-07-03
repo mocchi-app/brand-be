@@ -39,7 +39,6 @@
             POSTGRES_BRAND_PASSWORD: "{{ lookup('env', 'POSTGRES_BRAND_PASSWORD') }}"
             POSTGRES_BRAND_DB: "{{ lookup('env', 'POSTGRES_BRAND_DB') }} "
 
-
       always:
         - name: Remove deployment folder
           file:

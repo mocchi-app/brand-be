@@ -23,7 +23,6 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
       - name: Build with Gradle
-        if: github.ref == 'refs/heads/master'
         run: ./gradlew build
       - name: Build the Docker image
         if: github.ref == 'refs/heads/master'
@@ -35,7 +34,7 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-#    if: github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master'
 
     steps:
       - uses: actions/checkout@v2
