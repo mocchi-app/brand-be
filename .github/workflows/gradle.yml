@@ -15,19 +15,46 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up JDK 1.8
-      uses: actions/setup-java@v1
-      with:
-        java-version: 1.8
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
-    - name: Build with Gradle
-      run: ./gradlew build
-    - name: Build the Docker image
-      if: github.ref == 'refs/heads/master'
-      run: docker login docker.pkg.github.com -u sausageRoll -p ${{ secrets.GITHUB_TOKEN }} && ./gradlew buildBrandImage
-    - name: Publish the Docker image
-      if: github.ref == 'refs/heads/master'
-      run: docker push docker.pkg.github.com/mocchi-app/brand-be/brand-be:latest
+      - uses: actions/checkout@v2
+      - name: Set up JDK 1.8
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.8
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+      - name: Build with Gradle
+        run: ./gradlew build
+      - name: Build the Docker image
+        if: github.ref == 'refs/heads/master'
+        run: docker login docker.pkg.github.com -u sausageRoll -p ${{ secrets.GITHUB_TOKEN }} && ./gradlew buildBrandImage
+      - name: Publish the Docker image
+        if: github.ref == 'refs/heads/master'
+        run: docker push docker.pkg.github.com/mocchi-app/brand-be/brand-be:latest
 
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master'
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Create inventory file
+        run: echo ${{ secrets.INSTANCE_IP }} > ./deployment/hosts
+
+      - name: Execute Ansible Playbook
+        uses: arillso/action.playbook@0.0.1
+        with:
+          playbook: ./deployment/deploy.yaml
+          inventory: ./deployment/hosts
+          private_key: ${{ secrets.SSH_KEY }}
+          user: deployer
+        env:
+          ANSIBLE_HOST_KEY_CHECKING: 'false'
+          ANSIBLE_DEPRECATION_WARNINGS: 'false'
+          API_KEY: ${{ secrets.API_KEY }}
+          API_SECRET_KEY: ${{ secrets.API_SECRET_KEY }}
+          STRIPE_API_KEY: ${{ secrets.STRIPE_API_KEY }}
+          POSTGRES_BRAND_USER: ${{ secrets.POSTGRES_BRAND_USER }}
+          POSTGRES_BRAND_PASSWORD: ${{ secrets.POSTGRES_BRAND_PASSWORD }}
+          POSTGRES_BRAND_DB: ${{ secrets.POSTGRES_BRAND_DB }}

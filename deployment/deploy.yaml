@@ -1,0 +1,47 @@
+- name: Deploy Brand BE service
+  hosts: all
+  gather_facts: yes
+  vars:
+    timestamp: "{{ ansible_date_time.epoch }}"
+  tasks:
+    - name: Deployment block
+      block:
+        - name: Create deployment folder
+          file:
+            path: ~/deploy-{{ timestamp }}
+            state: directory
+
+        - name: Clone deployment repo
+          git:
+            repo: 'https://github.com/mocchi-app/mocchi-deployment.git'
+            dest: ~/deploy-{{ timestamp }}
+
+        - name: Start up database
+          docker_compose:
+            project_src: ~/deploy-{{ timestamp }}
+            project_name: mocchi
+            services: postgres_brand
+            state: present
+
+        - name: Start up application
+          docker_compose:
+            project_src: ~/deploy-{{ timestamp }}
+            project_name: mocchi
+            services: brand_be
+            state: present
+            pull: yes
+            restarted: true
+          environment:
+            API_KEY: "{{ lookup('env', 'API_KEY') }}"
+            API_SECRET_KEY:  "{{ lookup('env', 'API_SECRET_KEY') }}"
+            STRIPE_API_KEY: "{{ lookup('env', 'STRIPE_API_KEY') }}"
+            POSTGRES_BRAND_USER: "{{ lookup('env', 'POSTGRES_BRAND_USER') }}"
+            POSTGRES_BRAND_PASSWORD: "{{ lookup('env', 'POSTGRES_BRAND_PASSWORD') }}"
+            POSTGRES_BRAND_DB: "{{ lookup('env', 'POSTGRES_BRAND_DB') }} "
+
+
+      always:
+        - name: Remove deployment folder
+          file:
+            path: ~/deploy-{{ timestamp }}
+            state: absent
