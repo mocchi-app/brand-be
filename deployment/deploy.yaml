@@ -20,14 +20,14 @@
           docker_compose:
             project_src: ~/deploy-{{ timestamp }}
             project_name: mocchi
-            services: postgres_brand
+            services: postgres-brand
             state: present
 
         - name: Start up application
           docker_compose:
             project_src: ~/deploy-{{ timestamp }}
             project_name: mocchi
-            services: brand_be
+            services: brand-be
             state: present
             pull: yes
             restarted: true
