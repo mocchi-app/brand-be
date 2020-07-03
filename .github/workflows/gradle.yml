@@ -43,6 +43,9 @@ jobs:
       - name: Create inventory file
         run: echo ${{ secrets.INSTANCE_IP }} > ./deployment/hosts
 
+      - name: Show file
+        run: echo ./deployment/hosts
+
       - name: Execute Ansible Playbook
         uses: arillso/action.playbook@0.0.1
         with:
