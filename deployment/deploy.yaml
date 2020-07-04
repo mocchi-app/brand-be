@@ -37,7 +37,7 @@
             STRIPE_API_KEY: "{{ lookup('env', 'STRIPE_API_KEY') }}"
             POSTGRES_BRAND_USER: "{{ lookup('env', 'POSTGRES_BRAND_USER') }}"
             POSTGRES_BRAND_PASSWORD: "{{ lookup('env', 'POSTGRES_BRAND_PASSWORD') }}"
-            POSTGRES_BRAND_DB: "{{ lookup('env', 'POSTGRES_BRAND_DB') }} "
+            POSTGRES_BRAND_DB: "{{ lookup('env', 'POSTGRES_BRAND_DB') }}"
 
       always:
         - name: Remove deployment folder
