@@ -22,6 +22,10 @@
             project_name: mocchi
             services: postgres-brand
             state: present
+          environment:
+            POSTGRES_BRAND_USER: "{{ lookup('env', 'POSTGRES_BRAND_USER') }}"
+            POSTGRES_BRAND_PASSWORD: "{{ lookup('env', 'POSTGRES_BRAND_PASSWORD') }}"
+            POSTGRES_BRAND_DB: "{{ lookup('env', 'POSTGRES_BRAND_DB') }}"
 
         - name: Start up application
           docker_compose:
