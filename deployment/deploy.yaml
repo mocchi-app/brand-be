@@ -42,6 +42,8 @@
             POSTGRES_BRAND_USER: "{{ lookup('env', 'POSTGRES_BRAND_USER') }}"
             POSTGRES_BRAND_PASSWORD: "{{ lookup('env', 'POSTGRES_BRAND_PASSWORD') }}"
             POSTGRES_BRAND_DB: "{{ lookup('env', 'POSTGRES_BRAND_DB') }}"
+            SERVER_REDIRECT_URL: "{{ lookup('env', 'SERVER_REDIRECT_URL') }}"
+            FRONTEND_REDIRECT_URL: "{{ lookup('env', 'FRONTEND_REDIRECT_URL') }}"
 
       always:
         - name: Remove deployment folder
