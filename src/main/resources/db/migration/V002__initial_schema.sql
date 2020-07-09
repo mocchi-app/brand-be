@@ -24,7 +24,7 @@ CREATE TABLE brand_products
 (
     bp_id              BIGSERIAL PRIMARY KEY,
     bp_b_id            BIGINT REFERENCES brand (b_id),
-    bp_shopify_id      BIGINT NOT NULL,
+    bp_shopify_id      BIGINT  NOT NULL,
     bp_title           TEXT,
     bp_body_html       TEXT,
     bp_vendor          TEXT,
@@ -37,6 +37,8 @@ CREATE TABLE brand_products
     bp_published_scope TEXT,
     bp_tags            TEXT,
     bp_variants        JSONB,
+    bp_image_src       TEXT,
+    bp_approved        BOOLEAN NOT NULL DEFAULT true,
     UNIQUE (bp_b_id, bp_shopify_id)
 );
 

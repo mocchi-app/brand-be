@@ -26,7 +26,7 @@ class BrandProductRepository(
                     ${nullOrString(it.createdAt?.toString())}, ${nullOrString(it.handle)},
                     ${nullOrString(it.updatedAt?.toString())}, ${nullOrString(it.publishedAt?.toString())},
                     ${nullOrString(it.templateSuffix)}, ${nullOrString(it.publishedScope)},
-                    ${nullOrString(it.tags)}, ${nullOrString(it.variants?.asString())}
+                    ${nullOrString(it.tags)}, ${nullOrString(it.variants?.asString())}, ${nullOrString(it.imageSrc)}
                 )
             """.trimIndent()
         }
@@ -36,7 +36,7 @@ class BrandProductRepository(
                         INSERT INTO brand_products (bp_b_id, bp_shopify_id, bp_title, bp_body_html, bp_vendor,
                                                     bp_product_type, bp_created_at, bp_handle, bp_updated_at,
                                                     bp_published_at, bp_template_suffix, bp_published_scope,
-                                                    bp_tags, bp_variants)
+                                                    bp_tags, bp_variants, bp_image_src)
                         VALUES $it
                         ON CONFLICT (bp_b_id, bp_shopify_id) DO UPDATE SET
                            bp_b_id = EXCLUDED.bp_b_id,
@@ -52,7 +52,8 @@ class BrandProductRepository(
                            bp_template_suffix = EXCLUDED.bp_template_suffix,
                            bp_published_scope = EXCLUDED.bp_published_scope,
                            bp_tags = EXCLUDED.bp_tags,
-                           bp_variants = EXCLUDED.bp_variants
+                           bp_variants = EXCLUDED.bp_variants,
+                           bp_image_src = EXCLUDED.bp_image_src
                         RETURNING *
                     """.trimIndent()
                 )

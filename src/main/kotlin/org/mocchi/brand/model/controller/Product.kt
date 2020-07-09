@@ -18,5 +18,6 @@ data class Product(
     val templateSuffix: String?,
     val publishedScope: String?,
     val tags: String?,
-    val variants: List<Variants>?
+    val variants: List<Variants>?,
+    val imageSrc: String?
 )

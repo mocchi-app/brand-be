@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.OffsetDateTime
-import java.util.*
+import java.util.HashMap
 
 data class GetAllProductsResponse(
     val products: List<ShopifyProduct>
@@ -23,11 +23,18 @@ data class ShopifyProduct(
     @JsonProperty("template_suffix") val templateSuffix: String?,
     @JsonProperty("published_scope") val publishedScope: String?,
     @JsonProperty("tags") val tags: String?,
-    @JsonProperty("variants") val variants: List<Variants>?
+    @JsonProperty("variants") val variants: List<Variants>?,
+    @JsonProperty("image") val image: Image?
 )
 
 data class Variants(
     @JsonAnySetter
     @get:JsonAnyGetter
     val properties: Map<Any, Any> = HashMap()
+)
+
+data class Image(
+    @JsonProperty("id") val imageId: Long,
+    @JsonProperty("product_id") val shopifyId: Long,
+    @JsonProperty("src") val src: String
 )

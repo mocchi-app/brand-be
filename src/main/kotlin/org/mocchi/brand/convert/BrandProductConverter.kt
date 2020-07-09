@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class BrandProductConverter : Converter<Map<String, Any>, BrandProduct> {
+
     override fun convert(source: Map<String, Any>): BrandProduct =
         BrandProduct(
             id = extractFromResultSet(source, "bp_id"),
@@ -25,7 +26,8 @@ class BrandProductConverter : Converter<Map<String, Any>, BrandProduct> {
             templateSuffix = extractFromResultSet(source, "bp_template_suffix"),
             publishedScope = extractFromResultSet(source, "bp_published_scope"),
             tags = extractFromResultSet(source, "bp_tags"),
-            variants = extractFromResultSet(source, "bp_variants")
+            variants = extractFromResultSet(source, "bp_variants"),
+            imageSrc = extractFromResultSet(source, "bp_image_src")
         )
 }
 
@@ -33,6 +35,7 @@ class BrandProductConverter : Converter<Map<String, Any>, BrandProduct> {
 class ProductConverter(
     private val objectMapper: ObjectMapper
 ) : Converter<BrandProduct, Product> {
+
     override fun convert(source: BrandProduct): Product =
         Product(
             id = source.id,
@@ -51,7 +54,8 @@ class ProductConverter(
             tags = source.tags,
             variants = source.variants?.let {
                 objectMapper.readValue<List<Variants>>(it.asString())
-            }
+            },
+            imageSrc = source.imageSrc
         )
 
 }
