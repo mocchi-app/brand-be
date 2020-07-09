@@ -26,7 +26,8 @@ class BrandProductConverter : Converter<Map<String, Any>, BrandProduct> {
             templateSuffix = extractFromResultSet(source, "bp_template_suffix"),
             publishedScope = extractFromResultSet(source, "bp_published_scope"),
             tags = extractFromResultSet(source, "bp_tags"),
-            variants = extractFromResultSet(source, "bp_variants")
+            variants = extractFromResultSet(source, "bp_variants"),
+            imageSrc = extractFromResultSet(source, "bp_image_src")
         )
 }
 

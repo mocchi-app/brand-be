@@ -160,6 +160,7 @@ internal class BrandProductRepositoryTest : AbstractIntegrationTest() {
         templateSuffix = RandomStringUtils.randomAlphabetic(10),
         publishedScope = RandomStringUtils.randomAlphabetic(10),
         tags = RandomStringUtils.randomAlphabetic(10),
-        variants = Json.of("{}")
+        variants = Json.of("{}"),
+        imageSrc = RandomStringUtils.randomAlphabetic(10)
     )
 }
