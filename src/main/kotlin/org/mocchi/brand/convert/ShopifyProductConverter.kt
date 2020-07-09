@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component
 class ShopifyProductConverter(
     private val objectMapper: ObjectMapper
 ) : BiConverter<Long, ShopifyProduct, InsertBrandProduct> {
+
     override fun convert(brandId: Long, source: ShopifyProduct): InsertBrandProduct = InsertBrandProduct(
         brandId = brandId,
         shopifyId = source.shopifyId,
@@ -24,7 +25,8 @@ class ShopifyProductConverter(
         templateSuffix = source.templateSuffix,
         publishedScope = source.publishedScope,
         tags = source.tags,
-        variants = objectMapper.writeValueAsString(source.variants).let { Json.of(it) }
+        variants = objectMapper.writeValueAsString(source.variants).let { Json.of(it) },
+        imageSrc = source.image?.src
     )
 
 }

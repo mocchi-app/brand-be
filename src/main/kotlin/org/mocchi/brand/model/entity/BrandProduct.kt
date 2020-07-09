@@ -21,7 +21,8 @@ data class BrandProduct(
     @Column("bp_template_suffix") val templateSuffix: String? = null,
     @Column("bp_published_scope") val publishedScope: String? = null,
     @Column("bp_tags") val tags: String? = null,
-    @Column("bp_variants") val variants: Json?
+    @Column("bp_variants") val variants: Json?,
+    @Column("bp_image_src") val imageSrc: String? = null
 )
 
 @Table("brand_products")
@@ -39,5 +40,6 @@ data class InsertBrandProduct(
     @Column("bp_template_suffix") val templateSuffix: String? = null,
     @Column("bp_published_scope") val publishedScope: String? = null,
     @Column("bp_tags") val tags: String? = null,
-    @Column("bp_variants") val variants: Json? = null
+    @Column("bp_variants") val variants: Json? = null,
+    @Column("bp_image_src") val imageSrc: String? = null
 )
