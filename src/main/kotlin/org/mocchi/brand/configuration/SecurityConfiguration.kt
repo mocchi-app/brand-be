@@ -1,6 +1,7 @@
 package org.mocchi.brand.configuration
 
 import org.springframework.context.annotation.Bean
+import org.springframework.http.HttpMethod
 import org.springframework.security.authentication.ReactiveAuthenticationManager
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity
 import org.springframework.security.config.web.server.ServerHttpSecurity
@@ -40,7 +41,8 @@ class SecurityConfiguration {
             .pathMatchers("/api/v1/brand/signup").permitAll()
             .pathMatchers("/api/v1/brand/complete").permitAll()
             .pathMatchers("/api/**/brand/**").hasRole("BRAND_ADMIN")
-            .pathMatchers("/api/**/payment/**").hasRole("BRAND_ADMIN")
+            .pathMatchers(HttpMethod.GET, "/api/**/payment/**").hasRole("BRAND_ADMIN")
+            .pathMatchers("/api/**/payment/**").hasRole("BRAND_ADMIN_PAYMENT")
             .anyExchange().authenticated()
             .and()
             .build()

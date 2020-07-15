@@ -3,7 +3,7 @@ package org.mocchi.brand.repository
 import org.mocchi.brand.convert.BrandTokenAfterInsertConverter
 import org.mocchi.brand.convert.BrandWithTokenConverter
 import org.mocchi.brand.model.entity.BrandToken
-import org.mocchi.brand.model.entity.BrandWithToken
+import org.mocchi.brand.model.entity.FullBrand
 import org.mocchi.brand.model.entity.InsertBrandToken
 import org.springframework.data.r2dbc.core.DatabaseClient
 import org.springframework.data.r2dbc.core.awaitFirst
@@ -49,10 +49,12 @@ class BrandTokenRepository(
             .fetch()
             .awaitFirstOrNull()
 
-    fun getBrandByToken(token: String): Mono<BrandWithToken> =
+    fun getBrandByToken(token: String): Mono<FullBrand> =
         databaseClient.execute(
             """
-            SELECT * FROM brand b JOIN brand_token bt on b.b_id = bt.t_b_id
+            SELECT * FROM brand b 
+                JOIN brand_token bt on b.b_id = bt.t_b_id
+                LEFT JOIN brand_payment bp on bp.p_b_id = b.b_id
             WHERE bt.t_token = :token
         """.trimIndent()
         )

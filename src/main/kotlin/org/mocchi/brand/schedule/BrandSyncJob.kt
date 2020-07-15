@@ -28,7 +28,7 @@ class BrandSyncJob(
                 runBlocking {
                     brandRepository.getByIdJoinWithToken(brandId)
                         ?.let { brand ->
-                            shopifyService.fetchAllProducts(brand.url, brand.token)
+                            shopifyService.fetchAllProducts(brand.url, brand.token.token)
                                 .map { products ->
                                     products.map {
                                         shopifyProductConverter.convert(brandId, it)

@@ -12,12 +12,12 @@ import org.springframework.stereotype.Component
 import org.springframework.web.server.ServerWebExchange
 import reactor.core.publisher.Mono
 
-
 @Component
 class SecurityContextRepository(
     private val reactiveAuthenticationManager: ReactiveAuthenticationManager,
     private val brandTokenService: BrandTokenService
 ) : ServerSecurityContextRepository {
+
     companion object {
         private const val TOKEN_PREFIX = "Bearer "
     }
@@ -34,7 +34,12 @@ class SecurityContextRepository(
                 brandTokenService.getBrandByToken(token)
                     .map {
                         AnonymousAuthenticationToken(
-                            token, it, listOf(SimpleGrantedAuthority("ROLE_BRAND_ADMIN"))
+                            token, it, listOf(
+                            SimpleGrantedAuthority(
+                                it.payment?.let { "ROLE_BRAND_ADMIN" }
+                                    ?: "ROLE_BRAND_ADMIN_PAYMENT"
+                            )
+                        )
                         )
                     }
                     .flatMap { reactiveAuthenticationManager.authenticate(it) }
