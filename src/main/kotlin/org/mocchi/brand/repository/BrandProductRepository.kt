@@ -3,12 +3,17 @@ package org.mocchi.brand.repository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.reactive.asFlow
+import kotlinx.coroutines.reactive.awaitFirst
+import kotlinx.coroutines.reactor.asFlux
 import org.mocchi.brand.convert.BrandProductConverter
 import org.mocchi.brand.model.entity.BrandProduct
 import org.mocchi.brand.model.entity.InsertBrandProduct
 import org.springframework.data.domain.Sort
 import org.springframework.data.r2dbc.core.DatabaseClient
+import org.springframework.data.relational.core.query.Criteria
+import org.springframework.data.relational.core.query.Update
 import org.springframework.stereotype.Repository
+import reactor.core.publisher.Mono
 
 @Repository
 class BrandProductRepository(
@@ -75,4 +80,17 @@ class BrandProductRepository(
 
     private fun nullOrString(nullable: String?) =
         nullable?.let { "'$nullable'" } ?: "null"
+
+    suspend fun updateApproved(id: Long, brandId: Long, approved: Boolean): Int =
+        databaseClient.update()
+            .table("brand_products")
+            .using(Update.update("bp_approved", approved))
+            .matching(
+                Criteria.where("bp_id").`is`(id).and(
+                    Criteria.where("bp_b_id").`is`(brandId)
+                )
+            )
+            .fetch()
+            .rowsUpdated()
+            .awaitFirst()
 }
