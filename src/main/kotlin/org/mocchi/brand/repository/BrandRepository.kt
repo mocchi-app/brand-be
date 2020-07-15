@@ -4,7 +4,7 @@ import kotlinx.coroutines.reactive.awaitFirstOrNull
 import org.mocchi.brand.convert.BrandAfterInsertConverter
 import org.mocchi.brand.convert.BrandWithTokenConverter
 import org.mocchi.brand.model.entity.Brand
-import org.mocchi.brand.model.entity.BrandWithToken
+import org.mocchi.brand.model.entity.FullBrand
 import org.mocchi.brand.model.entity.InsertBrand
 import org.springframework.data.r2dbc.core.DatabaseClient
 import org.springframework.data.r2dbc.core.awaitFirst
@@ -36,7 +36,7 @@ class BrandRepository(
             .fetch()
             .awaitFirstOrNull()
 
-    suspend fun getByIdJoinWithToken(brandId: Long): BrandWithToken? =
+    suspend fun getByIdJoinWithToken(brandId: Long): FullBrand? =
         databaseClient.execute(
             """
             SELECT * FROM brand b JOIN brand_token bt on b.b_id = bt.t_b_id

@@ -6,9 +6,10 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.mocchi.brand.AbstractIntegrationTest
 import org.mocchi.brand.model.entity.Brand
-import org.mocchi.brand.model.entity.BrandWithToken
+import org.mocchi.brand.model.entity.FullBrand
 import org.mocchi.brand.model.entity.InsertBrand
 import org.mocchi.brand.model.entity.InsertBrandToken
+import org.mocchi.brand.model.entity.Token
 import org.springframework.beans.factory.annotation.Autowired
 
 internal class BrandRepositoryTest : AbstractIntegrationTest() {
@@ -96,8 +97,13 @@ internal class BrandRepositoryTest : AbstractIntegrationTest() {
                 )
             )
             val actual = brandRepository.getByIdJoinWithToken(brand.id)
-            val expected = BrandWithToken(
-                brand.id, brand.fullName, brand.url, brand.email, token.token, token.scope
+            val expected = FullBrand(
+                brandId = brand.id,
+                fullName = brand.fullName,
+                url = brand.url,
+                email = brand.email,
+                token = Token(token.token, token.scope),
+                payment = null
             )
             assertThat(actual).isEqualTo(expected)
         }
