@@ -19,5 +19,6 @@ data class Product(
     val publishedScope: String?,
     val tags: String?,
     val variants: List<Variants>?,
-    val imageSrc: String?
+    val imageSrc: String?,
+    val approved: Boolean
 )

@@ -7,6 +7,8 @@ import kotlinx.coroutines.runBlocking
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.mocchi.brand.AbstractIntegrationTest
+import org.mocchi.brand.model.entity.Brand
+import org.mocchi.brand.model.entity.BrandProduct
 import org.mocchi.brand.model.entity.InsertBrand
 import org.mocchi.brand.model.entity.InsertBrandProduct
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,7 +22,6 @@ internal class BrandProductRepositoryTest : AbstractIntegrationTest() {
 
     @Autowired
     private lateinit var brandProductRepository: BrandProductRepository
-
 
     @Test
     fun `should insert several brand products`() {
@@ -42,10 +43,10 @@ internal class BrandProductRepositoryTest : AbstractIntegrationTest() {
                 .hasSize(2)
             assertThat(actual[0])
                 .hasNoNullFieldsOrProperties()
-                .isEqualToIgnoringGivenFields(firstBrand, "id", "variants")
+                .isEqualToIgnoringGivenFields(firstBrand, "id", "variants", "approved")
             assertThat(actual[1])
                 .hasNoNullFieldsOrProperties()
-                .isEqualToIgnoringGivenFields(secondBrand, "id", "variants")
+                .isEqualToIgnoringGivenFields(secondBrand, "id", "variants", "approved")
         }
     }
 
@@ -69,10 +70,10 @@ internal class BrandProductRepositoryTest : AbstractIntegrationTest() {
                 .hasSize(2)
             assertThat(actual[0])
                 .hasNoNullFieldsOrProperties()
-                .isEqualToIgnoringGivenFields(firstBrand, "id", "variants")
+                .isEqualToIgnoringGivenFields(firstBrand, "id", "variants", "approved")
             assertThat(actual[1])
                 .hasNoNullFieldsOrProperties()
-                .isEqualToIgnoringGivenFields(secondBrand, "id", "variants")
+                .isEqualToIgnoringGivenFields(secondBrand, "id", "variants", "approved")
 
             val updatedBrand = secondBrand.copy(title = "new title")
 
@@ -84,10 +85,10 @@ internal class BrandProductRepositoryTest : AbstractIntegrationTest() {
                 .hasSize(2)
             assertThat(updatedActual[0])
                 .hasNoNullFieldsOrProperties()
-                .isEqualToIgnoringGivenFields(firstBrand, "id", "variants")
+                .isEqualToIgnoringGivenFields(firstBrand, "id", "variants", "approved")
             assertThat(updatedActual[1])
                 .hasNoNullFieldsOrProperties()
-                .isEqualToIgnoringGivenFields(updatedBrand, "id", "variants")
+                .isEqualToIgnoringGivenFields(updatedBrand, "id", "variants", "approved")
         }
     }
 
@@ -111,7 +112,7 @@ internal class BrandProductRepositoryTest : AbstractIntegrationTest() {
             ).asFlux().collectList().awaitFirst()
 
             assertThat(actual).hasSize(1)
-            assertThat(actual[0]).isEqualToIgnoringGivenFields(brandProduct, "id")
+            assertThat(actual[0]).isEqualToIgnoringGivenFields(brandProduct, "id", "approved")
         }
     }
 
@@ -139,11 +140,54 @@ internal class BrandProductRepositoryTest : AbstractIntegrationTest() {
                 .hasSize(2)
             assertThat(actual[0])
                 .hasNoNullFieldsOrProperties()
-                .isEqualToIgnoringGivenFields(firstBrand, "id", "variants")
+                .isEqualToIgnoringGivenFields(firstBrand, "id", "variants", "approved")
             assertThat(actual[1])
                 .hasNoNullFieldsOrProperties()
-                .isEqualToIgnoringGivenFields(secondBrand, "id", "variants")
+                .isEqualToIgnoringGivenFields(secondBrand, "id", "variants", "approved")
         }
+    }
+
+    @Test
+    fun `should update brand products`() {
+        runBlocking {
+
+            val brand = brandRepository.addNewBrand(
+                InsertBrand(
+                    "fullName",
+                    "url",
+                    "email"
+                )
+            )
+
+            val product = generateBrandProduct(brand.id, 1)
+            val insertBrandProduct = brandProductRepository.insertBrandProduct(listOf(product))
+                .asFlux()
+                .collectList()
+                .awaitFirst()
+            assertThat(insertBrandProduct)
+                .hasSize(1)
+
+            assertThat(insertBrandProduct[0].approved)
+                .isTrue()
+
+            assertUpdatedTo(insertBrandProduct, brand, true)
+            assertUpdatedTo(insertBrandProduct, brand, false)
+        }
+    }
+
+    private suspend fun assertUpdatedTo(
+        insertBrandProduct: MutableList<BrandProduct>,
+        brand: Brand,
+        newApprovedState: Boolean
+    ) {
+        val approved = brandProductRepository.updateApproved(insertBrandProduct[0].id, brand.id, newApprovedState)
+        assertThat(approved).isEqualTo(1)
+
+        val updatedList = brandProductRepository.selectAll().asFlux().collectList().awaitFirst()
+        assertThat(updatedList)
+            .hasSize(1)
+        assertThat(updatedList[0].approved)
+            .isEqualTo(newApprovedState)
     }
 
     private fun generateBrandProduct(brandId: Long, shopifyId: Long) = InsertBrandProduct(

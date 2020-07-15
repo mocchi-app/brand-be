@@ -1,5 +1,6 @@
 package org.mocchi.brand.model.entity
 
+import com.sun.org.apache.xpath.internal.operations.Bool
 import io.r2dbc.postgresql.codec.Json
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table
@@ -22,7 +23,8 @@ data class BrandProduct(
     @Column("bp_published_scope") val publishedScope: String? = null,
     @Column("bp_tags") val tags: String? = null,
     @Column("bp_variants") val variants: Json?,
-    @Column("bp_image_src") val imageSrc: String? = null
+    @Column("bp_image_src") val imageSrc: String? = null,
+    @Column("bp_approved") val approved: Boolean
 )
 
 @Table("brand_products")

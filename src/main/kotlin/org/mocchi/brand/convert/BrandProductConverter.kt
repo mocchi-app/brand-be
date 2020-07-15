@@ -27,7 +27,8 @@ class BrandProductConverter : Converter<Map<String, Any>, BrandProduct> {
             publishedScope = extractFromResultSet(source, "bp_published_scope"),
             tags = extractFromResultSet(source, "bp_tags"),
             variants = extractFromResultSet(source, "bp_variants"),
-            imageSrc = extractFromResultSet(source, "bp_image_src")
+            imageSrc = extractFromResultSet(source, "bp_image_src"),
+            approved = extractFromResultSet(source, "bp_approved")
         )
 }
 
@@ -55,7 +56,8 @@ class ProductConverter(
             variants = source.variants?.let {
                 objectMapper.readValue<List<Variants>>(it.asString())
             },
-            imageSrc = source.imageSrc
+            imageSrc = source.imageSrc,
+            approved = source.approved
         )
 
 }
