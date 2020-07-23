@@ -6,6 +6,7 @@ plugins {
     id "org.jetbrains.kotlin.plugin.spring" version "1.3.72"
     id "org.flywaydb.flyway" version "6.4.4"
     id 'com.bmuschko.docker-remote-api' version '6.4.0'
+    id 'maven'
 }
 
 import com.bmuschko.gradle.docker.tasks.image.*
@@ -13,10 +14,31 @@ import com.bmuschko.gradle.docker.tasks.image.*
 group 'org.mocchi.brand'
 version '1.0-SNAPSHOT'
 
+def gprusr
+def gprkey
+def githubProperties = new Properties()
+def properties = rootProject.file("github.properties")
+if (properties.exists()) {
+    githubProperties.load(new FileInputStream(properties))
+    gprusr = githubProperties["gprusr"]
+    gprkey = githubProperties["gprkey"]
+} else {
+    gprusr = System.getenv("GITHUB_USERNAME")
+    gprkey = System.getenv("GITHUB_TOKEN")
+}
+
 repositories {
     mavenLocal()
     mavenCentral()
     maven { url 'http://oss.jfrog.org/artifactory/oss-snapshot-local/' }
+    maven {
+        name = "GitHubPackages"
+        url = uri("https://maven.pkg.github.com/mocchi-app/mocchi-definitions/")
+        credentials {
+            username = gprusr
+            password = gprkey
+        }
+    }
 }
 
 dependencies {
@@ -27,20 +49,20 @@ dependencies {
 
     implementation 'io.r2dbc:r2dbc-postgresql:0.8.3.RELEASE'
     implementation 'io.r2dbc:r2dbc-pool:0.8.3.RELEASE'
-    implementation "org.springframework.data:spring-data-r2dbc:1.1.1.RELEASE"
-    implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.14'
-    implementation 'org.springframework:spring-jdbc'
-    implementation 'org.flywaydb:flyway-core:6.3.3'
+    implementation ("org.springframework.data:spring-data-r2dbc:1.1.1.RELEASE")
+    implementation ("org.postgresql:postgresql:42.2.14")
+    implementation ("org.springframework:spring-jdbc")
+    implementation ("org.flywaydb:flyway-core:6.3.3")
 
-    implementation group: 'org.jetbrains.kotlinx', name: 'kotlinx-coroutines-core', version: '1.3.7'
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.3.7'
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-reactor:1.3.7")
 
-    implementation group: 'org.hibernate.validator', name: 'hibernate-validator', version: '6.1.5.Final'
-    implementation group: 'javax.validation', name: 'validation-api', version: '2.0.1.Final'
+    implementation ("org.hibernate.validator:hibernate-validator:6.1.5.Final")
+    implementation ("javax.validation:validation-api:2.0.1.Final")
 
-    implementation 'org.springframework.boot:spring-boot-starter-quartz'
+    implementation ("org.springframework.boot:spring-boot-starter-quartz")
 
-    implementation "io.springfox:springfox-boot-starter:3.0.0-SNAPSHOT"
+    implementation ("io.springfox:springfox-boot-starter:3.0.0-SNAPSHOT")
 
     implementation("io.ktor:ktor-client:1.3.1")
     implementation("io.ktor:ktor-client-json:1.3.1")
@@ -50,14 +72,16 @@ dependencies {
     implementation "io.ktor:ktor-client-cio:1.3.1"
     implementation("io.ktor:ktor-client-logging-jvm:1.3.1")
 
-    implementation "com.stripe:stripe-java:19.27.0"
+    implementation ("com.stripe:stripe-java:19.27.0")
+
+    implementation 'org.mocchi:mocchi-definitions:d220de1'
 
     implementation "com.fasterxml.jackson.module:jackson-module-kotlin"
     implementation group: 'com.fasterxml.jackson.module', name: 'jackson-modules-java8', version: '2.11.0', ext: 'pom'
 
-    testImplementation 'org.apache.commons:commons-lang3:3.10'
+    testImplementation('org.apache.commons:commons-lang3:3.10')
 
-    testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation('org.springframework.security:spring-security-test')
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
