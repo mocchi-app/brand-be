@@ -27,6 +27,20 @@
             POSTGRES_BRAND_PASSWORD: "{{ lookup('env', 'POSTGRES_BRAND_PASSWORD') }}"
             POSTGRES_BRAND_DB: "{{ lookup('env', 'POSTGRES_BRAND_DB') }}"
 
+        - name: Start up Zookeeper
+          docker_compose:
+            project_src: ~/deploy-{{ timestamp }}
+            project_name: mocchi
+            services: zoo
+            state: present
+
+        - name: Start up Kafka
+          docker_compose:
+            project_src: ~/deploy-{{ timestamp }}
+            project_name: mocchi
+            services: kafka
+            state: present
+
         - name: Start up application
           docker_compose:
             project_src: ~/deploy-{{ timestamp }}
