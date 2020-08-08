@@ -30,7 +30,7 @@ spring:
             driverDelegateClass: org.quartz.impl.jdbcjobstore.PostgreSQLDelegate
   kafka:
     producer:
-      bootstrap-servers: kafka:9091
+      bootstrap-servers: kafka:9092
 logging:
   level:
     springfox:
