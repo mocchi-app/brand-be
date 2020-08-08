@@ -1,6 +1,5 @@
 package org.mocchi.brand.model.entity
 
-import com.sun.org.apache.xpath.internal.operations.Bool
 import io.r2dbc.postgresql.codec.Json
 import org.springframework.data.relational.core.mapping.Column
 import org.springframework.data.relational.core.mapping.Table

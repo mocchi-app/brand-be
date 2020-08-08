@@ -28,6 +28,9 @@ spring:
         quartz:
           jobStore:
             driverDelegateClass: org.quartz.impl.jdbcjobstore.PostgreSQLDelegate
+  kafka:
+    producer:
+      bootstrap-servers: kafka:9091
 logging:
   level:
     springfox:
