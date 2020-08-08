@@ -43,10 +43,16 @@ internal class BrandProductRepositoryTest : AbstractIntegrationTest() {
                 .hasSize(2)
             assertThat(actual[0])
                 .hasNoNullFieldsOrProperties()
-                .isEqualToIgnoringGivenFields(firstBrand, "id", "variants", "approved")
+                .isEqualToIgnoringGivenFields(
+                        firstBrand,
+                        "id", "variants", "approved", "createdAt", "updatedAt", "publishedAt"
+                )
             assertThat(actual[1])
                 .hasNoNullFieldsOrProperties()
-                .isEqualToIgnoringGivenFields(secondBrand, "id", "variants", "approved")
+                .isEqualToIgnoringGivenFields(
+                        secondBrand,
+                        "id", "variants", "approved", "createdAt", "updatedAt", "publishedAt"
+                )
         }
     }
 
@@ -70,10 +76,16 @@ internal class BrandProductRepositoryTest : AbstractIntegrationTest() {
                 .hasSize(2)
             assertThat(actual[0])
                 .hasNoNullFieldsOrProperties()
-                .isEqualToIgnoringGivenFields(firstBrand, "id", "variants", "approved")
+                .isEqualToIgnoringGivenFields(
+                        firstBrand,
+                        "id", "variants", "approved", "createdAt", "updatedAt", "publishedAt"
+                )
             assertThat(actual[1])
                 .hasNoNullFieldsOrProperties()
-                .isEqualToIgnoringGivenFields(secondBrand, "id", "variants", "approved")
+                .isEqualToIgnoringGivenFields(
+                        secondBrand,
+                        "id", "variants", "approved", "createdAt", "updatedAt", "publishedAt"
+                )
 
             val updatedBrand = secondBrand.copy(title = "new title")
 
@@ -85,10 +97,16 @@ internal class BrandProductRepositoryTest : AbstractIntegrationTest() {
                 .hasSize(2)
             assertThat(updatedActual[0])
                 .hasNoNullFieldsOrProperties()
-                .isEqualToIgnoringGivenFields(firstBrand, "id", "variants", "approved")
+                .isEqualToIgnoringGivenFields(
+                        firstBrand,
+                        "id", "variants", "approved", "createdAt", "updatedAt", "publishedAt"
+                )
             assertThat(updatedActual[1])
                 .hasNoNullFieldsOrProperties()
-                .isEqualToIgnoringGivenFields(updatedBrand, "id", "variants", "approved")
+                .isEqualToIgnoringGivenFields(
+                        updatedBrand,
+                        "id", "variants", "approved", "createdAt", "updatedAt", "publishedAt"
+                )
         }
     }
 
@@ -140,10 +158,16 @@ internal class BrandProductRepositoryTest : AbstractIntegrationTest() {
                 .hasSize(2)
             assertThat(actual[0])
                 .hasNoNullFieldsOrProperties()
-                .isEqualToIgnoringGivenFields(firstBrand, "id", "variants", "approved")
+                .isEqualToIgnoringGivenFields(
+                        firstBrand,
+                        "id", "variants", "approved", "createdAt", "updatedAt", "publishedAt"
+                )
             assertThat(actual[1])
                 .hasNoNullFieldsOrProperties()
-                .isEqualToIgnoringGivenFields(secondBrand, "id", "variants", "approved")
+                .isEqualToIgnoringGivenFields(
+                        secondBrand,
+                        "id", "variants", "approved", "createdAt", "updatedAt", "publishedAt"
+                )
         }
     }
 
